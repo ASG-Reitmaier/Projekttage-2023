@@ -1,4 +1,4 @@
-<!-- Header-->
+<!-- Header. Kann eingebunden werden.-->
 
 <?php 
 
