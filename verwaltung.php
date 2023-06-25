@@ -226,8 +226,8 @@ if(isset($_POST["IDKL"])){
                     <?php if($row["kursleiter2"]>0){ echo $db->zeigeEinLehrer($row["kursleiter2"])[0]["name"];} ?><br> 
                     <?php if($row["kursleiter3"]>0){ echo $db->zeigeEinLehrer($row["kursleiter2"])[0]["name"];} ?> 
                 </td>
-                <td><?php $teilnehmerzahl = $db->zeigeTeilnehmerzahl($row["kurs_id"]);
-                      echo $teilnehmerzahl[0]["anzahl"]." von ".$row["teilnehmerbegrenzung"]; 
+                <td><?php
+                      echo $row["teilnehmerzahl"]." von ".$row["teilnehmerbegrenzung"]; 
                      ?>
                 </td> 
                 <td><?php echo $row["jahrgangsstufen_beschraenkung"]; ?> </td>

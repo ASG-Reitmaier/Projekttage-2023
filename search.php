@@ -138,6 +138,7 @@ class DB
         $query = "INSERT INTO benutzer_zu_kurse (b_id,kurs_id) VALUES ($benutzer_id, $kurs_id)";
         $statement = $this->con->prepare($query);
         $statement->execute();
+        
         return "<div class='col'><div class='alert alert-success alert-dismissible fade show' role='alert'> Anmeldung erfolgreich! </div>";
     }
     
@@ -497,6 +498,9 @@ class DB
         $statement->execute();
         $data = $statement->fetchAll(PDO::FETCH_ASSOC);
         if($this->zeigeAngemeldet($kurs_id, $benutzer_id) == false){
+            $query = "UPDATE kurse SET teilnehmerzahl = teilnehmerzahl - 1 WHERE kurs_id=$kurs_id";
+            $statement = $this->con->prepare($query);
+            $statement->execute();
         return "<div class='alert alert-success alert-dismissible fade show' role='alert'> $name wurde erfolgreich abgemeldet!  </div>";
         }
         else{
@@ -595,8 +599,11 @@ class DB
             }
 
             
-            //Falls noch genügend Plätze frei sind und der Schüler an diesem Tag noch nichts gebucht hat.
+            //Falls noch genügend Plätze frei sind und der Schüler an diesem Tag noch nichts gebucht hat, wir die Teilnehmerzahl erhöht und der Schüler dem Kurs zugeordnet
             if($test){
+                $query = "UPDATE kurse SET teilnehmerzahl = teilnehmerzahl + 1 WHERE kurs_id=$kurs_id";
+                $statement = $this->con->prepare($query);
+                $statement->execute();
                 $ausgabe = $ausgabe.$this->setzeBenutzerZuKurse($kurs_id, $benutzer_id);
             }
         }  

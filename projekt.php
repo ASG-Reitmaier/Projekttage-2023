@@ -235,7 +235,7 @@ $teilnehmerzahl = $db->zeigeTeilnehmerzahl($kurs_id);
                 <div class="container" style="float: left; width: 100%; margin-top: 30px;">
 
 
-                    <?php if($benutzerrolle == "schueler" && date("Y.m.d")>="2022.07.04" && date("Y.m.d")<="2022.07.06"){
+                    <?php if($benutzerrolle == "schueler" && date("Y.m.d")>="2022.07.04" && date("Y.m.d")<="2023.07.06"){
                     
                     if($db->zeigeAngemeldet($kurs_id , $benutzer_id)) { ?>
 
