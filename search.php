@@ -95,25 +95,43 @@ class DB
     //Löscht den angegebenen Benutzer (Lehrer oder Schüler).
     public function loescheBenutzer($benutzer_id)
     {   
-        //Falls der Benutzer (Schüler) in einem Kurs angemeldet war, wird hier der Eintrag gelöscht.
-        $query = "DELETE FROM benutzer_zu_kurse WHERE kurs_id = $benutzer_id";
+        $benutzername = str_replace(".", " ", $this->zeigeEinLehrer($benutzer_id)[0]['name']);
+
+        //Falls der Benutzer (Lehrer) als 1. Kursleiter eingetragen war, darf der Benutzer nicht gelöscht werden.
+        $query = "SELECT kurse.name, kursleiter1 FROM kurse WHERE kursleiter1 = $benutzer_id";
         $statement = $this->con->prepare($query);
         $statement->execute();
-        //Falls der Benutzer (Lehrer) als 2. Kursleiter eingetragen war, wird der eintrag entfernt.
-        $query = "UPDATE kurse SET kursleiter2 = 0 WHERE kursleiter2 = $benutzer_id";
-        $statement = $this->con->prepare($query);
-        $statement->execute();
-        //Falls der Benutzer (Lehrer) als 3. Kursleiter eingetragen war, wird der eintrag entfernt.
-        $query = "UPDATE kurse SET kursleiter3 = 0 WHERE kursleiter2 = $benutzer_id";
-        $statement = $this->con->prepare($query);
-        $statement->execute();
-        //Benutzer wird entfernt.
-        $query = "DELETE FROM benutzer WHERE benutzer_id = $benutzer_id";
-        $statement = $this->con->prepare($query);
-        $statement->execute();
+        $kurse = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        if(!empty($kurse))
+        {
+            //Fehlermeldung, falls die Kursliste nicht leer ist.
+            $kurs = $kurse[0]['name'];
+            $ausgabe = "<div class='alert alert-danger alert-dismissible fade show' role='alert'>Der Benutzer $benutzername kann nicht entfernt werden, da er im Kurs $kurs als 1. Kursleiter eingetragen ist</div>";
+        }
+        else{
+            //Falls der Benutzer (Schüler) in einem Kurs angemeldet war, wird hier der Eintrag gelöscht.
+            $query = "DELETE FROM benutzer_zu_kurse WHERE kurs_id = $benutzer_id";
+            $statement = $this->con->prepare($query);
+            $statement->execute();
+            //Falls der Benutzer (Lehrer) als 2. Kursleiter eingetragen war, wird der eintrag entfernt.
+            $query = "UPDATE kurse SET kursleiter2 = 0 WHERE kursleiter2 = $benutzer_id";
+            $statement = $this->con->prepare($query);
+            $statement->execute();
+            //Falls der Benutzer (Lehrer) als 3. Kursleiter eingetragen war, wird der eintrag entfernt.
+            $query = "UPDATE kurse SET kursleiter3 = 0 WHERE kursleiter2 = $benutzer_id";
+            $statement = $this->con->prepare($query);
+            $statement->execute();
+            //Benutzer wird entfernt.
+            $query = "DELETE FROM benutzer WHERE benutzer_id = $benutzer_id";
+            $statement = $this->con->prepare($query);
+            $statement->execute();
+            $ausgabe = "<div class='alert alert-success alert-dismissible fade show' role='alert'> Der Benutzer $benutzername wurde gelöscht!   </div>";
+        }
+        return $ausgabe;
     }
 
-   
+    
     //Löscht den angegebenen Kurs.
     public function loescheKurs($kurs_id)
     {   //Bild löschen.
@@ -441,7 +459,7 @@ class DB
         $zeitraum_von=$zeitraum_von.":00";
         $zeitraum_bis=$zeitraum_bis.":00";
         
-        $eintrag = "INSERT INTO `kurse` (`name`, `bild`, `beschreibung`, `kursleiter1`, `kursleiter2`, `kursleiter3`, `teilnehmerbegrenzung`, `jahrgangsstufen_beschraenkung`, `ort`, `Tag_1`, `Tag_2`, `Tag_3`, `zeitraum_von`, `zeitraum_bis`, `kosten`) VALUES ('$name', '$bild', '$beschreibung', '$kursleiter1', '$kursleiter2', '$kursleiter3', '$teilnehmerbegrenzung', '$beschraenkung', '$ort' , '$tag1', '$tag2', '$tag3', '$zeitraum_von', '$zeitraum_bis', '$kosten');";
+        $eintrag = "INSERT INTO `kurse` (`name`, `bild`, `beschreibung`, `kursleiter1`, `kursleiter2`, `kursleiter3`, `teilnehmerzahl` ,`teilnehmerbegrenzung`, `jahrgangsstufen_beschraenkung`, `ort`, `Tag_1`, `Tag_2`, `Tag_3`, `zeitraum_von`, `zeitraum_bis`, `kosten`) VALUES ('$name', '$bild', '$beschreibung', '$kursleiter1', '$kursleiter2', '$kursleiter3', 0, '$teilnehmerbegrenzung', '$beschraenkung', '$ort' , '$tag1', '$tag2', '$tag3', '$zeitraum_von', '$zeitraum_bis', '$kosten');";
 
         $statement = $this->con->prepare($eintrag);
         $statement->execute();

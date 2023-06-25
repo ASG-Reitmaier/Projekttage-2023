@@ -6,15 +6,16 @@ $titel = "Verwaltung";
 $db = new DB();
 @$_SESSION['ExportAbfrage'];
 $table = "Kurs";
+$ausgabe = "";
 //ob_start immer nach session_start(). Zum exportieren
 ob_start();
 
 if(isset($_POST["IDL"])){
-    $db->loescheBenutzer($_POST["IDL"]);
+    $ausgabe = $db->loescheBenutzer($_POST["IDL"]);
 }
 
 if(isset($_POST["IDKL"])){
-    $db->loescheKurs($_POST["IDKL"]);
+    $ausgabe = $db->loescheKurs($_POST["IDKL"]);
 }
 
 ?>
@@ -47,6 +48,8 @@ if(isset($_POST["IDKL"])){
 
 <body class="body">
     <?php include 'header.php'?>
+
+    <?php echo $ausgabe ?>
 
     <div class="container" style="margin-top: 5%;">
 
@@ -224,7 +227,7 @@ if(isset($_POST["IDKL"])){
                 <td><?php echo $row["name"]; ?></td>
                 <td><?php if($row["kursleiter1"]>0){ echo $db->zeigeEinLehrer($row["kursleiter1"])[0]["name"];} ?><br> 
                     <?php if($row["kursleiter2"]>0){ echo $db->zeigeEinLehrer($row["kursleiter2"])[0]["name"];} ?><br> 
-                    <?php if($row["kursleiter3"]>0){ echo $db->zeigeEinLehrer($row["kursleiter2"])[0]["name"];} ?> 
+                    <?php if($row["kursleiter3"]>0){ echo $db->zeigeEinLehrer($row["kursleiter3"])[0]["name"];} ?> 
                 </td>
                 <td><?php
                       echo $row["teilnehmerzahl"]." von ".$row["teilnehmerbegrenzung"]; 
