@@ -6,7 +6,7 @@ $db = new DB();
 $titel = "Erstellung";
    
     if(isset($_POST["name"]) && isset($_POST["beschreibung"]) && isset($_POST["kursleiter1"]) && isset($_POST["kursleiter2"]) && isset($_POST["kursleiter3"]) && isset($_POST["teilnehmerbegrenzung"]) && isset($_POST["ort"]) && isset($_POST["raum"]) && isset($_POST["tag"])&& isset($_POST["zeitraum_von"]) && isset($_POST["zeitraum_bis"]) && isset($_POST["kosten"])) {
-      if($_POST["name"]!="" && $_POST["beschreibung"]!="" && $_POST["kursleiter1"]!="" && $_POST["teilnehmerbegrenzung"]!=""  && isset($_POST["ort"]) && $_POST["zeitraum_von"]!="" && $_POST["zeitraum_bis"]!="" && $_POST["kosten"]!=""){ 
+      if($_POST["name"]!="" && $_POST["beschreibung"]!="" && $_POST["kursleiter1"]!="" && $_POST["teilnehmerbegrenzung"]!="" && $_POST["ort"]!=""  && $_POST["zeitraum_von"]!="" && $_POST["zeitraum_bis"]!="" && $_POST["kosten"]!=""){ 
         $name                   = $_POST["name"];
         $beschreibung           = $_POST["beschreibung"];
         $kursleiter1            = $_POST["kursleiter1"];
@@ -242,7 +242,7 @@ $titel = "Erstellung";
             <div style=" padding-left: 3%; padding-right: 3%" class="mb-3">
                 <label for="ort" class="col col-form-label">Ort</label>
                 <div class="col-sm-10">
-                    <input class="form-control" name="ort" placeholder="Adalbert-Stifter-Gymnasium">
+                    <input class="form-control" name="ort" value="Adalbert-Stifter-Gymnasium">
                 </div>
             </div>
 

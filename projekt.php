@@ -219,8 +219,18 @@ $teilnehmerzahl = $db->zeigeTeilnehmerzahl($kurs_id);
                                 <td> <?php if ($projektDaten[0]["Tag_1"]){echo " Mo"; } if ($projektDaten[0]["Tag_2"]){echo " Di";} if ($projektDaten[0]["Tag_3"]){echo " Mi";}?></td>
                                 <td> <?php echo substr($projektDaten[0]["zeitraum_von"], 0, -3); ?></td>
                                 <td> <?php echo substr($projektDaten[0]["zeitraum_bis"], 0, -3); ?></td>
-                                <td> <?php echo $projektDaten[0]["ort"]; ?></td>
-                                <td> <?php echo $projektDaten[0]["jahrgangsstufen_beschraenkung"]; ?></td>
+                                <td> <?php echo $projektDaten[0]["ort"]; if($projektDaten[0]["raum"]!= NULL){echo " (".$db->nenneRaum($projektDaten[0]["raum"])[0]["bezeichnung"].")";};?></td>
+                                <?php $jgst = "";
+                                    if($projektDaten[0]["jgst5"]==1){$jgst = $jgst."5, ";} 
+                                    if($projektDaten[0]["jgst6"]==1){$jgst = $jgst."6, ";} 
+                                    if($projektDaten[0]["jgst7"]==1){$jgst = $jgst."7, ";} 
+                                    if($projektDaten[0]["jgst8"]==1){$jgst = $jgst."8, ";} 
+                                    if($projektDaten[0]["jgst9"]==1){$jgst = $jgst."9, ";} 
+                                    if($projektDaten[0]["jgst10"]==1){$jgst = $jgst."10, ";} 
+                                    if($projektDaten[0]["jgst11"]==1){$jgst = $jgst."11, ";} 
+                                    $jgst = substr($jgst,0,-2);
+                                ?>
+                                <td> <?php echo $jgst; ?></td>
                                 <td> <?php echo $projektDaten[0]["kosten"]; ?></td>
                             </tr>
                         </tbody>

@@ -181,6 +181,16 @@ class DB
         return $data;
     }
    
+    // Gibt das verschlüsselte Passwort eines Benutzers zurück. (+ Prevention of SQL Injection)
+    public function nenneRaum($raum_id)
+    {
+        $query = "SELECT bezeichnung FROM raeume WHERE raum_id = $raum_id";
+        $statement = $this->con->prepare($query);
+        $statement->execute();
+        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    }
+
     // Änderung von Benutzerdaten via MySQL query (+ Prevention of SQL Injection)
     public function updateBenutzer($id, $name, $klasse, $rolle)
     {
