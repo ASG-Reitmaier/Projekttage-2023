@@ -238,7 +238,7 @@ $tag = "Tag_1";
             <div style=" padding-left: 3%; padding-right: 3%" class="mb-3">
                 <label for="ort" class="col col-form-label">Ort</label>
                 <div class="col-sm-10">
-                    <input class="form-control" name="ort" placeholder="z.B. Raum 326">
+                    <input class="form-control" name="ort" placeholder="Adalbert-Stifter-Gymnasium">
                 </div>
             </div>
 
@@ -264,26 +264,24 @@ $tag = "Tag_1";
 
                         
                         <div class="col-sm-6">
-                            <div class="input-group form-control" style="width:200px">
+                            <div class="input-group form-control" style="width:220px">
                                     <div class="input-group-prepend" style="width:80px">
                                         <label class="input-group-text" for="Tag">Tag</label>
                                     </div>
-                                    <select class="custom-select" id="kursleiter1" name="tag">
-                                        <option selected>Montag</option>                                      
-                                        <option value="tag1">Montag</option>   
-                                        <option value="tag2">Dienstag</option>  
-                                        <option value="tag3">Mittwoch</option>  
+                                    <select class="custom-select" id="tagDropdown" name="tag" onchange="optionenÄndern()">
+                                        <option selected value="Tag_1">Montag</option>                                      
+                                        <option value="Tag_2">Dienstag</option>  
+                                        <option value="Tag_3">Mittwoch</option>  
                                     </select>
-                            </div>
-                                
+                            </div> 
 
-                            <div class="input-group form-control" style="width:200px">
+                            <div class="input-group form-control" style="width:220px">
                                     <div class="input-group-prepend" style="width:80px">
                                         <label class="input-group-text" for="Raum">Raum</label>
                                     </div>
                                     <select class="custom-select" id="raum" name="raum">
-                                        <option selected>...</option>
-                                        <?php $raeume = $db->zeigeRaeume();
+                                        <option selected>ohne</option>
+                                        <?php $raeume = $db->zeigeFreieRaeume($tag);
                                         foreach($raeume AS $row) { ?>
                                         <option value="<?php echo $row['raum_id']?>"><?php echo $row['bezeichnung'] ?></option>
                                         <?php } ?>

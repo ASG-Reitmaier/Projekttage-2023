@@ -404,7 +404,19 @@ class DB
         return $data;
     }
 
-   
+
+    // Gibt Alles von freien Raeume für einen bestimmten Tag aus via MySQL query (+ Prevention of SQL Injection)
+    public function zeigeFreieRaeume($tag)
+    {
+        $query = "SELECT * FROM raeume LEFT JOIN (SELECT raum FROM kurse WHERE $tag = 1) AS tagraeume
+        ON raeume.raum_id = tagraeume.raum WHERE tagraeume.raum IS NULL ORDER BY bezeichnung";
+        $statement = $this->con->prepare($query);
+        $statement->execute();
+        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    }
+
+
     // Gibt Alle Schüler aus via MySQL query (+ Prevention of SQL Injection)
     public function zeigeSchüler()
     {
