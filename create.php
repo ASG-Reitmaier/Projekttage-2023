@@ -4,6 +4,7 @@ if(isset($_SESSION['rolle']) && $_SESSION['rolle'] != "schueler"){
 require_once('search.php');
 $db = new DB();
 $titel = "Erstellung";
+$tag = "Tag_1";
    
     if(isset($_POST["name"]) && isset($_POST["beschreibung"]) && isset($_POST["kursleiter1"]) && isset($_POST["kursleiter2"]) && isset($_POST["kursleiter3"]) && isset($_POST["teilnehmerbegrenzung"]) && isset($_POST["jahrgangsstufen_beschraenkung"]) && isset($_POST["ort"]) && isset($_POST["zeitraum_von"]) && isset($_POST["zeitraum_bis"]) && isset($_POST["kosten"])) {
       if($_POST["name"]!="" && $_POST["beschreibung"]!="" && $_POST["kursleiter1"]!="" && $_POST["teilnehmerbegrenzung"]!="" && $_POST["jahrgangsstufen_beschraenkung"]!="" && isset($_POST["ort"]) && $_POST["zeitraum_von"]!="" && $_POST["zeitraum_bis"]!="" && $_POST["kosten"]!=""){ 
@@ -148,7 +149,7 @@ $titel = "Erstellung";
             </div>
 
             <div style=" padding-left: 3%; padding-right: 18%" class="mb-3">
-                <label for="kursleiter2" class="col col-form-label">Kursleiter</label>
+                <label class="col col-form-label">Kursleiter</label>
 
                 <div class="input-group form-control">
                     <div class="input-group-prepend" style="width:150px">
@@ -201,8 +202,36 @@ $titel = "Erstellung";
 
             <div style=" padding-left: 3%; padding-right: 3%" class="mb-3">
                 <label for="jahrgangsstufen_beschraenkung" class="col col-form-label">Auswahl der Jahrgangsstufen</label>
-                <div class="col-sm-10">
-                    <input class="form-control" name="jahrgangsstufen_beschraenkung" placeholder="z.B. 6, 7, 8">
+                <div class="col-sm-10">                 
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" name="jgst5" value="option1">
+                        <label class="form-check-label" for="jgst5">5</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" name="jgst6" value="option2">
+                        <label class="form-check-label" for="jgst6">6</label>
+                    </div>
+                     <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" name="jgst7" value="option3">
+                        <label class="form-check-label" for="jgst7">7 </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" name="jgst8" value="option3">
+                        <label class="form-check-label" for="jgst8">8 </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" name="jgst9" value="option3">
+                        <label class="form-check-label" for="jgst9">9 </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" name="jgst10" value="option3">
+                        <label class="form-check-label" for="jgst10">10 </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" name="jgst11" value="option3">
+                        <label class="form-check-label" for="jgst11">11 </label>
+                    </div>
+
                 </div>
             </div>
 
@@ -217,7 +246,7 @@ $titel = "Erstellung";
                 <label for="zeit" class="col col-form-label">Zeit</label>
                 <div style="padding-bottom: 2%; width: 70%" class="mb-3 form-control">
                     <div class="row align-items-end">
-                        <div class="col-sm-9">
+                        <div class="col-sm-6">
                             <div style=" padding-left: 3%; padding-right: 3%" class="col-8">
                                 <label for="zeitraum_von" class="col-form-label">Beginn:</label>
                                 <div class="col-sm-10">
@@ -232,16 +261,35 @@ $titel = "Erstellung";
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-3">
-                            <div class="col-sm">
-                                <label for="ort" class="col-form-label">Montag</label> <input type="checkbox" name="tag1" placeholder="">
+
+                        
+                        <div class="col-sm-6">
+                            <div class="input-group form-control" style="width:200px">
+                                    <div class="input-group-prepend" style="width:80px">
+                                        <label class="input-group-text" for="Tag">Tag</label>
+                                    </div>
+                                    <select class="custom-select" id="kursleiter1" name="tag">
+                                        <option selected>Montag</option>                                      
+                                        <option value="tag1">Montag</option>   
+                                        <option value="tag2">Dienstag</option>  
+                                        <option value="tag3">Mittwoch</option>  
+                                    </select>
                             </div>
-                            <div class="col-sm">
-                                <label for="ort" class="col-form-label">Dienstag</label> <input type="checkbox" name="tag2" placeholder="">
+                                
+
+                            <div class="input-group form-control" style="width:200px">
+                                    <div class="input-group-prepend" style="width:80px">
+                                        <label class="input-group-text" for="Raum">Raum</label>
+                                    </div>
+                                    <select class="custom-select" id="raum" name="raum">
+                                        <option selected>...</option>
+                                        <?php $raeume = $db->zeigeRaeume();
+                                        foreach($raeume AS $row) { ?>
+                                        <option value="<?php echo $row['raum_id']?>"><?php echo $row['bezeichnung'] ?></option>
+                                        <?php } ?>
+                                    </select>
                             </div>
-                            <div class="col-sm">
-                                <label for="ort" class="col-form-label">Mittwoch</label> <input type="checkbox" name="tag3" placeholder="">
-                            </div>
+                                
                         </div>
                     </div>
                 </div>

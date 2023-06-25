@@ -394,16 +394,17 @@ class DB
         return $data;
     }
     
-        // Gibt Alles von Raeume aus via MySQL query (+ Prevention of SQL Injection)
+    // Gibt Alles von Raeume aus via MySQL query (+ Prevention of SQL Injection)
     public function zeigeRaeume()
     {
-        $query = "SELECT * FROM raeume ORDER BY raumnummer";
+        $query = "SELECT * FROM raeume ORDER BY bezeichnung";
         $statement = $this->con->prepare($query);
         $statement->execute();
         $data = $statement->fetchAll(PDO::FETCH_ASSOC);
         return $data;
     }
-    
+
+   
     // Gibt Alle Schüler aus via MySQL query (+ Prevention of SQL Injection)
     public function zeigeSchüler()
     {
