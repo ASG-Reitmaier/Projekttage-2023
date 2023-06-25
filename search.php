@@ -180,7 +180,7 @@ class DB
         $data = $statement->fetchAll(PDO::FETCH_ASSOC);
         return $data;
     }
-    
+   
     // Änderung von Benutzerdaten via MySQL query (+ Prevention of SQL Injection)
     public function updateBenutzer($id, $name, $klasse, $rolle)
     {
@@ -460,7 +460,7 @@ class DB
 
 
     //Methode zum einfuegen von neuen Kursen
-    public function kursEinfuegen($name, $beschreibung, $kursleiter1, $kursleiter2, $kursleiter3, $teilnehmerbegrenzung, $beschraenkung, $ort, $tag1, $tag2, $tag3, $zeitraum_von, $zeitraum_bis, $kosten, $bild)
+    public function kursEinfuegen($name, $beschreibung, $kursleiter1, $kursleiter2, $kursleiter3, $teilnehmerbegrenzung, $ort, $raum, $tag1, $tag2, $tag3, $jgst5, $jgst6, $jgst7, $jgst8, $jgst9, $jgst10, $jgst11,$zeitraum_von, $zeitraum_bis, $kosten, $bild)
     {
 /*      Mit Datum:  
         $zeitraum_von=mb_substr($zeitraum_von, 0, 10) ." ".mb_substr($zeitraum_von, 11)."-00";
@@ -471,8 +471,12 @@ class DB
 
         $zeitraum_von=$zeitraum_von.":00";
         $zeitraum_bis=$zeitraum_bis.":00";
+
+        if($raum == "ohne"){
+            $raum = NULL;
+        }
         
-        $eintrag = "INSERT INTO `kurse` (`name`, `bild`, `beschreibung`, `kursleiter1`, `kursleiter2`, `kursleiter3`, `teilnehmerzahl` ,`teilnehmerbegrenzung`, `jahrgangsstufen_beschraenkung`, `ort`, `Tag_1`, `Tag_2`, `Tag_3`, `zeitraum_von`, `zeitraum_bis`, `kosten`) VALUES ('$name', '$bild', '$beschreibung', '$kursleiter1', '$kursleiter2', '$kursleiter3', 0, '$teilnehmerbegrenzung', '$beschraenkung', '$ort' , '$tag1', '$tag2', '$tag3', '$zeitraum_von', '$zeitraum_bis', '$kosten');";
+        $eintrag = "INSERT INTO `kurse` (`name`, `bild`, `beschreibung`, `kursleiter1`, `kursleiter2`, `kursleiter3`, `teilnehmerzahl` ,`teilnehmerbegrenzung`, `jgst5`, `jgst6`,`jgst7`,`jgst8`,`jgst9`,`jgst10`,`jgst11`,`raum`, `ort`, `Tag_1`, `Tag_2`, `Tag_3`,  `zeitraum_von`, `zeitraum_bis`, `kosten`) VALUES ('$name', '$bild', '$beschreibung', '$kursleiter1', '$kursleiter2', '$kursleiter3', 0, '$teilnehmerbegrenzung', '$jgst5','$jgst6', '$jgst7', '$jgst8', '$jgst9', '$jgst10', '$jgst11','$raum', '$ort' , '$tag1', '$tag2', '$tag3',  '$zeitraum_von', '$zeitraum_bis', '$kosten');";
 
         $statement = $this->con->prepare($eintrag);
         $statement->execute();

@@ -4,38 +4,42 @@ if(isset($_SESSION['rolle']) && $_SESSION['rolle'] != "schueler"){
 require_once('search.php');
 $db = new DB();
 $titel = "Erstellung";
-$tag = "Tag_1";
    
-    if(isset($_POST["name"]) && isset($_POST["beschreibung"]) && isset($_POST["kursleiter1"]) && isset($_POST["kursleiter2"]) && isset($_POST["kursleiter3"]) && isset($_POST["teilnehmerbegrenzung"]) && isset($_POST["jahrgangsstufen_beschraenkung"]) && isset($_POST["ort"]) && isset($_POST["zeitraum_von"]) && isset($_POST["zeitraum_bis"]) && isset($_POST["kosten"])) {
-      if($_POST["name"]!="" && $_POST["beschreibung"]!="" && $_POST["kursleiter1"]!="" && $_POST["teilnehmerbegrenzung"]!="" && $_POST["jahrgangsstufen_beschraenkung"]!="" && isset($_POST["ort"]) && $_POST["zeitraum_von"]!="" && $_POST["zeitraum_bis"]!="" && $_POST["kosten"]!=""){ 
+    if(isset($_POST["name"]) && isset($_POST["beschreibung"]) && isset($_POST["kursleiter1"]) && isset($_POST["kursleiter2"]) && isset($_POST["kursleiter3"]) && isset($_POST["teilnehmerbegrenzung"]) && isset($_POST["ort"]) && isset($_POST["raum"]) && isset($_POST["tag"])&& isset($_POST["zeitraum_von"]) && isset($_POST["zeitraum_bis"]) && isset($_POST["kosten"])) {
+      if($_POST["name"]!="" && $_POST["beschreibung"]!="" && $_POST["kursleiter1"]!="" && $_POST["teilnehmerbegrenzung"]!=""  && isset($_POST["ort"]) && $_POST["zeitraum_von"]!="" && $_POST["zeitraum_bis"]!="" && $_POST["kosten"]!=""){ 
         $name                   = $_POST["name"];
         $beschreibung           = $_POST["beschreibung"];
         $kursleiter1            = $_POST["kursleiter1"];
         if($_POST["kursleiter2"]=="..."){$kursleiter2 = 0;} else{$kursleiter2 = $_POST["kursleiter2"];};
         if($_POST["kursleiter3"]=="..."){$kursleiter3 = 0;} else{$kursleiter3 = $_POST["kursleiter3"];};
         $teilnehmerbegrenzung   = $_POST["teilnehmerbegrenzung"];
-        $beschraenkung          = $_POST["jahrgangsstufen_beschraenkung"];
         $ort                    = $_POST["ort"];
-        if(isset($_POST["tag1"])){$tag1=1;} else{$tag1=0;};
-        if(isset($_POST["tag2"])){$tag2=1;} else{$tag2=0;};
-        if(isset($_POST["tag3"])){$tag3=1;} else{$tag3=0;};
+        $raum                   = $_POST["raum"];
+        if($_POST["tag"] == "Tag_1"){$tag1 = 1; $tag2 = 0; $tag3 = 0;}
+        elseif($_POST["tag"] == "Tag_2"){$tag1 = 0; $tag2 = 1; $tag3 = 0;}
+        elseif($_POST["tag"] == "Tag_3"){$tag1 = 0; $tag2 = 0; $tag3 = 1;};
+        if(isset($_POST["jgst5"])){$jgst5=1;} else{$jgst5=0;};
+        if(isset($_POST["jgst6"])){$jgst6=1;} else{$jgst6=0;};
+        if(isset($_POST["jgst7"])){$jgst7=1;} else{$jgst7=0;};
+        if(isset($_POST["jgst8"])){$jgst8=1;} else{$jgst8=0;};
+        if(isset($_POST["jgst9"])){$jgst9=1;} else{$jgst9=0;};
+        if(isset($_POST["jgst10"])){$jgst10=1;} else{$jgst10=0;};
+        if(isset($_POST["jgst11"])){$jgst11=1;} else{$jgst11=0;};
         $zeitraum_von           = $_POST["zeitraum_von"];
         $zeitraum_bis           = $_POST["zeitraum_bis"];
         $kosten                 = $_POST["kosten"];
         
-
       
         if($kursleiter1 == "...")
         {
           header("Location: create.php?error=Der Kurs benötigt einen Kursleiter!");
         } 
           
-        if($tag1==0 && $tag2==0 && $tag3==0)
+        if($jgst5==0 && $jgst6==0 && $jgst7==0 && $jgst8==0 && $jgst9==0 && $jgst10==0 && $jgst11==0)
         {
-          header("Location: create.php?error=Es muss mindestens ein Tag ausgewählt werden!");
+          header("Location: create.php?error=Es muss mindestens eine Jahrgangsstufe ausgewählt werden!");
         }
           
-
         if (!file_exists($_FILES['datei']['tmp_name']) || !is_uploaded_file($_FILES['datei']['tmp_name'])){
           
             $bild = "uploads/projekt.png";
@@ -76,7 +80,7 @@ $tag = "Tag_1";
         {
             
             
-          $db->kursEinfuegen($name, $beschreibung, $kursleiter1, $kursleiter2, $kursleiter3, $teilnehmerbegrenzung, $beschraenkung, $ort, $tag1, $tag2, $tag3, $zeitraum_von, $zeitraum_bis, $kosten, $bild);
+          $db->kursEinfuegen($name, $beschreibung, $kursleiter1, $kursleiter2, $kursleiter3, $teilnehmerbegrenzung, $ort, $raum, $tag1, $tag2, $tag3, $jgst5, $jgst6, $jgst7, $jgst8, $jgst9, $jgst10, $jgst11,$zeitraum_von, $zeitraum_bis, $kosten, $bild);
             
                 
 
@@ -85,8 +89,8 @@ $tag = "Tag_1";
         }
         else
         {
-            header("Location: create.php?error=Dieser Kursname existiert bereits! Bitte wählen Sie einen anderen!");
-          }
+          header("Location: create.php?error=Dieser Kursname existiert bereits! Bitte wählen Sie einen anderen!");
+        }
 
          
       } else{
@@ -216,19 +220,19 @@ $tag = "Tag_1";
                         <label class="form-check-label" for="jgst7">7 </label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" name="jgst8" value="option3">
+                        <input class="form-check-input" type="checkbox" name="jgst8" value="option4">
                         <label class="form-check-label" for="jgst8">8 </label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" name="jgst9" value="option3">
+                        <input class="form-check-input" type="checkbox" name="jgst9" value="option5">
                         <label class="form-check-label" for="jgst9">9 </label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" name="jgst10" value="option3">
+                        <input class="form-check-input" type="checkbox" name="jgst10" value="option6">
                         <label class="form-check-label" for="jgst10">10 </label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" name="jgst11" value="option3">
+                        <input class="form-check-input" type="checkbox" name="jgst11" value="option7">
                         <label class="form-check-label" for="jgst11">11 </label>
                     </div>
 
@@ -281,7 +285,7 @@ $tag = "Tag_1";
                                     </div>
                                     <select class="custom-select" id="raum" name="raum">
                                         <option selected>ohne</option>
-                                        <?php $raeume = $db->zeigeFreieRaeume($tag);
+                                        <?php $raeume = $db->zeigeFreieRaeume("Tag_1");
                                         foreach($raeume AS $row) { ?>
                                         <option value="<?php echo $row['raum_id']?>"><?php echo $row['bezeichnung'] ?></option>
                                         <?php } ?>
