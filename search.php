@@ -92,17 +92,28 @@ class DB
         echo "<br><div class='alert alert-success alert-dismissible fade show' role='alert'> Schülerdaten erfolgreich hochgeladen!   </div>";
     }
     
-    //Löscht den angegebenen Benutzer.
+    //Löscht den angegebenen Benutzer (Lehrer oder Schüler).
     public function loescheBenutzer($benutzer_id)
     {   
+        //Falls der Benutzer (Schüler) in einem Kurs angemeldet war, wird hier der Eintrag gelöscht.
         $query = "DELETE FROM benutzer_zu_kurse WHERE kurs_id = $benutzer_id";
         $statement = $this->con->prepare($query);
         $statement->execute();
+        //Falls der Benutzer (Lehrer) als 2. Kursleiter eingetragen war, wird der eintrag entfernt.
+        $query = "UPDATE kurse SET kursleiter2 = 0 WHERE kursleiter2 = $benutzer_id";
+        $statement = $this->con->prepare($query);
+        $statement->execute();
+        //Falls der Benutzer (Lehrer) als 3. Kursleiter eingetragen war, wird der eintrag entfernt.
+        $query = "UPDATE kurse SET kursleiter3 = 0 WHERE kursleiter2 = $benutzer_id";
+        $statement = $this->con->prepare($query);
+        $statement->execute();
+        //Benutzer wird entfernt.
         $query = "DELETE FROM benutzer WHERE benutzer_id = $benutzer_id";
         $statement = $this->con->prepare($query);
         $statement->execute();
     }
-    
+
+   
     //Löscht den angegebenen Kurs.
     public function loescheKurs($kurs_id)
     {   //Bild löschen.
