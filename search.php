@@ -527,21 +527,25 @@ class DB
 
         if($data[0]["COUNT(*)"]<$datu[0]["teilnehmerbegrenzung"])
         {
+            //Liefert alle Kurse des Schülers
             $query = "SELECT kurs_id FROM benutzer_zu_kurse WHERE b_id=$benutzer_id";
             $statement = $this->con->prepare($query);
             $statement->execute();
             $b_kurse = $statement->fetchAll(PDO::FETCH_ASSOC);
 
+            //Liefert, ob der gewählte Kurs am 1. Tag stattfindet (0 oder 1)
             $query = "SELECT Tag_1 FROM kurse WHERE kurs_id=$kurs_id";
             $statement = $this->con->prepare($query);
             $statement->execute();
             $tag1_pr = $statement->fetchAll(PDO::FETCH_ASSOC);
 
+            //Liefert, ob der gewählte Kurs am 2. Tag stattfindet (0 oder 1)
             $query = "SELECT Tag_2 FROM kurse WHERE kurs_id=$kurs_id";
             $statement = $this->con->prepare($query); 
             $statement->execute();
             $tag2_pr = $statement->fetchAll(PDO::FETCH_ASSOC);
 
+            //Liefert, ob der gewählte Kurs am 3. Tag stattfindet (0 oder 1)
             $query = "SELECT Tag_3 FROM kurse WHERE kurs_id=$kurs_id";
             $statement = $this->con->prepare($query);
             $statement->execute();
@@ -551,28 +555,31 @@ class DB
 
             $test=true;
 
+            //Prüft, ob der Schüler am Tag des gewählten Kurses bereits einen anderen Kurs gebucht hat. Hierzu werden alle gebuchten Kurse des Schülers (aus $b_kurse) durchlaufen.
             foreach ($b_kurse AS $row) 
             {     
                 $b=$row["kurs_id"];
                
+                //Liefert, ob der bereits gebuchte Kurs am 1. Tag stattfindet (0 oder 1)
                 $query = "SELECT Tag_1 FROM kurse WHERE kurs_id=$b";
                 $statement = $this->con->prepare($query);
                 $statement->execute();
                 $tag1 = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-
+                //Liefert, ob der bereits gebuchte Kurs am 2. Tag stattfindet (0 oder 1)
                 $query = "SELECT Tag_2 FROM kurse WHERE kurs_id=$b";
                 $statement = $this->con->prepare($query);
                 $statement->execute();
                 $tag2 = $statement->fetchAll(PDO::FETCH_ASSOC);
 
+                //Liefert, ob der bereits gebuchte Kurs am 3. Tag stattfindet (0 oder 1)
                 $query = "SELECT Tag_3 FROM kurse WHERE kurs_id=$b";
                 $statement = $this->con->prepare($query);
                 $statement->execute();
                 $tag3 = $statement->fetchAll(PDO::FETCH_ASSOC);
 
                
-
+                //Testet, ob es Überschneidungen gibt. Falls ja, wird der test auf false gesetzt, damit der Benutzer am Ende nicht eingefügt wird.
                 if($tag1_pr[0]["Tag_1"]==1 AND $tag1[0]["Tag_1"]==1){
                     $test=false;
                     $ausgabe = $ausgabe."<div class='alert alert-danger alert-dismissible fade show' role='alert'>An Tag 1 hast du bereits einen Kurs gebucht!   </div>";
@@ -588,7 +595,7 @@ class DB
             }
 
             
-
+            //Falls noch genügend Plätze frei sind und der Schüler an diesem Tag noch nichts gebucht hat.
             if($test){
                 $ausgabe = $ausgabe.$this->setzeBenutzerZuKurse($kurs_id, $benutzer_id);
             }
