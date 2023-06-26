@@ -408,7 +408,7 @@ if(isset($_POST["name"]) && isset($_POST["beschreibung"]) && isset($_POST["kursl
                 </div>
             </div>
 
-            <?php if( $_SESSION['rolle'] == "lehrer" && $timestamp >= 1687845600 && $timestamp<=1688140800){?>
+            <?php $timestamp = time(); if( $_SESSION['rolle'] == "lehrer" && $timestamp >= 1687845600 && $timestamp<=1688140800){?>
             <div style="text-align: center;">
                 <button type="submit" class="btn btn-success" style="font-size:21px;">Senden</button>
             </div>
