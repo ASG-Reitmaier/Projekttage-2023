@@ -48,18 +48,19 @@ $titel = "Projektverwaltung";
                 $kursleiter3 = $_POST["kursleiter3"];
         
                 if (strlen($_POST['teilnehmerbegrenzung'])){
-                    $teilnehmerzahl = $_POST['teilnehmerbegrenzung'];
+                    $teilnehmerbegrenzung = $_POST['teilnehmerbegrenzung'];
                 }
                 else { 
-                    $teilnehmerzahl = $kurs['teilnehmerbegrenzung']; 
+                    $teilnehmerbegrenzung = $kurs['teilnehmerbegrenzung']; 
                 }
         
-                if (strlen($_POST['jahrgangsstufen_beschraenkung'])){
-                    $beschraenkung = $_POST['jahrgangsstufen_beschraenkung'];
-                }
-                else { 
-                    $beschraenkung = $kurs['jahrgangsstufen_beschraenkung']; 
-                }
+                if(isset($_POST["jgst5"])){$jgst5=1;} else{$jgst5=0;};
+                if(isset($_POST["jgst6"])){$jgst6=1;} else{$jgst6=0;};
+                if(isset($_POST["jgst7"])){$jgst7=1;} else{$jgst7=0;};
+                if(isset($_POST["jgst8"])){$jgst8=1;} else{$jgst8=0;};
+                if(isset($_POST["jgst9"])){$jgst9=1;} else{$jgst9=0;};
+                if(isset($_POST["jgst10"])){$jgst10=1;} else{$jgst10=0;};
+                if(isset($_POST["jgst11"])){$jgst11=1;} else{$jgst11=0;};
         
                 if (strlen($_POST['ort'])){
                     $ort = $_POST['ort'];
@@ -68,10 +69,21 @@ $titel = "Projektverwaltung";
                     $ort = $kurs['ort']; 
                 }
         
-                if(isset($_POST["tag1"])){$tag1=1;} else{$tag1=0;};
-                if(isset($_POST["tag2"])){$tag2=1;} else{$tag2=0;};
-                if(isset($_POST["tag3"])){$tag3=1;} else{$tag3=0;};
-        
+                
+                if(empty($db->pruefeRaum($_POST["tag"],$_POST["raum"]))){
+                    if($_POST["tag"] == "Tag_1"){$tag1 = 1; $tag2 = 0; $tag3 = 0;}
+                    elseif($_POST["tag"] == "Tag_2"){$tag1 = 0; $tag2 = 1; $tag3 = 0;}
+                    elseif($_POST["tag"] == "Tag_3"){$tag1 = 0; $tag2 = 0; $tag3 = 1;};
+                    $raum = $_POST["raum"]; 
+                }
+                else{
+                    $tag1 = $kurs["Tag_1"]; 
+                    $tag2 = $kurs["Tag_2"]; 
+                    $tag3 = $kurs["Tag_3"]; 
+                    $raum = $kurs["raum"]; 
+                }
+
+
                 if($_POST["zeitraum_von"]!="" && $_POST["zeitraum_bis"]!=""){
                     $von = $_POST["zeitraum_von"].":00";
                     $bis = $_POST["zeitraum_bis"].":00";
@@ -80,8 +92,6 @@ $titel = "Projektverwaltung";
                     $von = $kurs["zeitraum_von"];
                     $bis = $kurs["zeitraum_bis"];
                 }
-        
-        
         
                 if (strlen($_POST['kosten'])){
                     $kosten = $_POST['kosten'];
@@ -130,10 +140,8 @@ $titel = "Projektverwaltung";
                     move_uploaded_file($_FILES['datei']['tmp_name'], $new_path);
             }
 
-
-
-            $db->updateKurs($_POST["IDK"], $name, $beschreibung, $kursleiter1, $kursleiter2, $kursleiter3, $teilnehmerzahl, $beschraenkung, $ort, $tag1, $tag2, $tag3, $von, $bis, $kosten, $bild);
-    }  
+            $db->updateKurs($_POST["IDK"], $name, $beschreibung, $kursleiter1, $kursleiter2, $kursleiter3, $teilnehmerbegrenzung, $ort, $raum, $tag1, $tag2, $tag3, $jgst5, $jgst6, $jgst7, $jgst8, $jgst9, $jgst10, $jgst11, $von, $bis, $kosten, $bild);
+    }        
     
     
     if(isset($_POST["IDK"])){ 
@@ -241,10 +249,39 @@ $titel = "Projektverwaltung";
                 </div>
             </div>
 
+
             <div style=" padding-left: 3%; padding-right: 3%" class="mb-3">
                 <label for="jahrgangsstufen_beschraenkung" class="col col-form-label">Auswahl der Jahrgangsstufen</label>
-                <div class="col-sm-10">
-                    <input class="form-control" name="jahrgangsstufen_beschraenkung" placeholder="<?php echo $kurs["jahrgangsstufen_beschraenkung"]; ?>">
+                <div class="col-sm-10">                 
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" name="jgst5" value="option1" <?php if($kurs["jgst5"] == 1){ ?> checked <?php } ?>>
+                        <label class="form-check-label" for="jgst5">5</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" name="jgst6" value="option2" <?php if($kurs["jgst6"] == 1){ ?> checked <?php } ?>>
+                        <label class="form-check-label" for="jgst6">6</label>
+                    </div>
+                     <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" name="jgst7" value="option3" <?php if($kurs["jgst7"] == 1){ ?> checked <?php } ?>>
+                        <label class="form-check-label" for="jgst7">7 </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" name="jgst8" value="option4" <?php if($kurs["jgst8"] == 1){ ?> checked <?php } ?>>
+                        <label class="form-check-label" for="jgst8">8 </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" name="jgst9" value="option5" <?php if($kurs["jgst9"] == 1){ ?> checked <?php } ?>>
+                        <label class="form-check-label" for="jgst9">9 </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" name="jgst10" value="option6" <?php if($kurs["jgst10"] == 1){ ?> checked <?php } ?>>
+                        <label class="form-check-label" for="jgst10">10 </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" name="jgst11" value="option7" <?php if($kurs["jgst11"] == 1){ ?> checked <?php } ?>>
+                        <label class="form-check-label" for="jgst11">11 </label>
+                    </div>
+
                 </div>
             </div>
 
@@ -255,11 +292,12 @@ $titel = "Projektverwaltung";
                 </div>
             </div>
 
+
             <div style=" padding-left: 3%; padding-right: 3%" class="mb-3">
                 <label for="zeit" class="col col-form-label">Zeit</label>
                 <div style="padding-bottom: 2%; width: 70%" class="mb-3 form-control">
                     <div class="row align-items-end">
-                        <div class="col-sm-9">
+                        <div class="col-sm-6">
                             <div style=" padding-left: 3%; padding-right: 3%" class="col-8">
                                 <label for="zeitraum_von" class="col-form-label">Beginn:</label>
                                 <div class="col-sm-10">
@@ -274,16 +312,33 @@ $titel = "Projektverwaltung";
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-3">
-                            <div class="col-sm">
-                                <label for="ort" class="col-form-label">Montag</label> <input type="checkbox" name="tag1" placeholder="" <?php if($kurs["Tag_1"] == 1){ ?> checked <?php } ?>>
+
+                        
+                        <div class="col-sm-6">
+                            <div class="input-group form-control" style="width:220px">
+                                    <div class="input-group-prepend" style="width:80px">
+                                        <label class="input-group-text" for="Tag">Tag</label>
+                                    </div>
+                                    <select class="custom-select" id="tagDropdown" name="tag">
+                                        <option selected value="Tag_1">Montag</option>                                      
+                                        <option value="Tag_2">Dienstag</option>  
+                                        <option value="Tag_3">Mittwoch</option>  
+                                    </select>
+                            </div> 
+
+                            <div class="input-group form-control" style="width:220px">
+                                    <div class="input-group-prepend" style="width:80px">
+                                        <label class="input-group-text" for="Raum">Raum</label>
+                                    </div>
+                                    <select class="custom-select" id="raum" name="raum">
+                                        <option selected value = 0>ohne</option>
+                                        <?php $raeume = $db->zeigeRaeume();
+                                        foreach($raeume AS $row) { ?>
+                                        <option value="<?php echo $row['raum_id']?>"><?php echo $row['bezeichnung'] ?></option>
+                                        <?php } ?>
+                                    </select>
                             </div>
-                            <div class="col-sm">
-                                <label for="ort" class="col-form-label">Dienstag</label> <input type="checkbox" name="tag2" placeholder="" <?php if($kurs["Tag_2"] == 1){ ?> checked <?php } ?>>
-                            </div>
-                            <div class="col-sm">
-                                <label for="ort" class="col-form-label">Mittwoch</label> <input type="checkbox" name="tag3" placeholder="" <?php if($kurs["Tag_3"] == 1){ ?> checked <?php } ?>>
-                            </div>
+                                
                         </div>
                     </div>
                 </div>

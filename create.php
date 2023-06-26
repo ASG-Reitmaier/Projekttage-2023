@@ -261,7 +261,7 @@ if(isset($_POST["name"]) && isset($_POST["beschreibung"]) && isset($_POST["kursl
                                     <div class="input-group-prepend" style="width:80px">
                                         <label class="input-group-text" for="Tag">Tag</label>
                                     </div>
-                                    <select class="custom-select" id="tagDropdown" name="tag" onchange="optionenÄndern()">
+                                    <select class="custom-select" id="tagDropdown" name="tag">
                                         <option selected value="Tag_1">Montag</option>                                      
                                         <option value="Tag_2">Dienstag</option>  
                                         <option value="Tag_3">Mittwoch</option>  
