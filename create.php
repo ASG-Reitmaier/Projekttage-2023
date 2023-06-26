@@ -259,7 +259,7 @@ if(isset($_POST["name"]) && isset($_POST["beschreibung"]) && isset($_POST["kursl
                                 <label class="input-group-text" for="tag">Tag</label>
                                 <select class="form-select" id="tag" name="tag">
                                     <option selected value="Tag_1">Montag</option>
-                                     <option value="Tag_2">Dienstag</option>
+                                    <option value="Tag_2">Dienstag</option>
                                     <option value="Tag_3">Mittwoch</option>
                                 </select>
                             </div>
@@ -408,9 +408,11 @@ if(isset($_POST["name"]) && isset($_POST["beschreibung"]) && isset($_POST["kursl
                 </div>
             </div>
 
+            <?php if( $_SESSION['rolle'] == "lehrer" && $timestamp >= 1687845600 && $timestamp<=1688140800){?>
             <div style="text-align: center;">
                 <button type="submit" class="btn btn-success" style="font-size:21px;">Senden</button>
             </div>
+            <?php }?>
 
         </form>
     </div>

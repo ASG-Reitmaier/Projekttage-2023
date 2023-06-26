@@ -317,7 +317,7 @@ $titel = "Projektverwaltung";
                                             elseif($kurs["Tag_2"]==1){echo "<option selected value='Tag_2'>Dienstag</option>";}
                                             elseif($kurs["Tag_3"]==1){echo "<option selected value='Tag_3'>Mittwoch</option>";}
                                             ?>
-                                    <option selected="Tag_1">Montag</option>
+                                    <option value="Tag_1">Montag</option>
                                     <option value="Tag_2">Dienstag</option>
                                     <option value="Tag_3">Mittwoch</option>
                                 </select>
@@ -446,7 +446,7 @@ $titel = "Projektverwaltung";
                                     </div>
                                 </div>
 
-                                
+
                             </div>
                          </div>
 
