@@ -32,107 +32,107 @@ $titel = "Projektverwaltung";
     <div class="container">
 
     <?php  if (isset($_POST['bestätigen'])){
-            $ergebnis = $db->zeigeKurs($_POST["IDK"]);
-            $kurs = $ergebnis[0];
-            if (strlen($_POST['name'])){
-                $name = $_POST['name'];
-            }
-            else {
-                $name = $kurs['name'];
-            }
-
-            $beschreibung = $_POST['beschreibung'];
-
-            $kursleiter1 = $_POST["kursleiter1"]; 
-            $kursleiter2 = $_POST["kursleiter2"];
-            $kursleiter3 = $_POST["kursleiter3"];
-    
-            if (strlen($_POST['teilnehmerbegrenzung'])){
-                $teilnehmerzahl = $_POST['teilnehmerbegrenzung'];
-            }
-            else { 
-                $teilnehmerzahl = $kurs['teilnehmerbegrenzung']; 
-            }
-    
-            if (strlen($_POST['jahrgangsstufen_beschraenkung'])){
-                $beschraenkung = $_POST['jahrgangsstufen_beschraenkung'];
-            }
-            else { 
-                $beschraenkung = $kurs['jahrgangsstufen_beschraenkung']; 
-            }
-    
-            if (strlen($_POST['ort'])){
-                $ort = $_POST['ort'];
-            }
-            else { 
-                $ort = $kurs['ort']; 
-            }
-    
-            if(isset($_POST["tag1"])){$tag1=1;} else{$tag1=0;};
-            if(isset($_POST["tag2"])){$tag2=1;} else{$tag2=0;};
-            if(isset($_POST["tag3"])){$tag3=1;} else{$tag3=0;};
-    
-            if($_POST["zeitraum_von"]!="" && $_POST["zeitraum_bis"]!=""){
-                $von = $_POST["zeitraum_von"].":00";
-                $bis = $_POST["zeitraum_bis"].":00";
-            }
-            else{
-                $von = $kurs["zeitraum_von"];
-                $bis = $kurs["zeitraum_bis"];
-            }
-    
-    
-    
-            if (strlen($_POST['kosten'])){
-                $kosten = $_POST['kosten'];
-            }
-            else { 
-                $kosten = $kurs['kosten']; 
-            }
-    
-            if (!file_exists($_FILES['datei']['tmp_name']) || !is_uploaded_file($_FILES['datei']['tmp_name'])){
-          
-            //Altes Bild bleibt bestehen.
-            $bild = $kurs["bild"];    
-            
-            }
-            else{
-                //Altes Bild löschen, wenn es nicht das Beispielbild ist.
-                if($kurs["bild"] != "uploads/projekt.png"){
-                    @unlink($kurs["bild"]);
+                $ergebnis = $db->zeigeKurs($_POST["IDK"]);
+                $kurs = $ergebnis[0];
+                if (strlen($_POST['name'])){
+                    $name = $_POST['name'];
                 }
+                else {
+                    $name = $kurs['name'];
+                }
+
+                $beschreibung = $_POST['beschreibung'];
+
+                $kursleiter1 = $_POST["kursleiter1"]; 
+                $kursleiter2 = $_POST["kursleiter2"];
+                $kursleiter3 = $_POST["kursleiter3"];
+        
+                if (strlen($_POST['teilnehmerbegrenzung'])){
+                    $teilnehmerzahl = $_POST['teilnehmerbegrenzung'];
+                }
+                else { 
+                    $teilnehmerzahl = $kurs['teilnehmerbegrenzung']; 
+                }
+        
+                if (strlen($_POST['jahrgangsstufen_beschraenkung'])){
+                    $beschraenkung = $_POST['jahrgangsstufen_beschraenkung'];
+                }
+                else { 
+                    $beschraenkung = $kurs['jahrgangsstufen_beschraenkung']; 
+                }
+        
+                if (strlen($_POST['ort'])){
+                    $ort = $_POST['ort'];
+                }
+                else { 
+                    $ort = $kurs['ort']; 
+                }
+        
+                if(isset($_POST["tag1"])){$tag1=1;} else{$tag1=0;};
+                if(isset($_POST["tag2"])){$tag2=1;} else{$tag2=0;};
+                if(isset($_POST["tag3"])){$tag3=1;} else{$tag3=0;};
+        
+                if($_POST["zeitraum_von"]!="" && $_POST["zeitraum_bis"]!=""){
+                    $von = $_POST["zeitraum_von"].":00";
+                    $bis = $_POST["zeitraum_bis"].":00";
+                }
+                else{
+                    $von = $kurs["zeitraum_von"];
+                    $bis = $kurs["zeitraum_bis"];
+                }
+        
+        
+        
+                if (strlen($_POST['kosten'])){
+                    $kosten = $_POST['kosten'];
+                }
+                else { 
+                    $kosten = $kurs['kosten']; 
+                }
+        
+                if (!file_exists($_FILES['datei']['tmp_name']) || !is_uploaded_file($_FILES['datei']['tmp_name'])){
+            
+                //Altes Bild bleibt bestehen.
+                $bild = $kurs["bild"];    
                 
-                //Neues Bild hochladen.
-                $upload_folder = 'uploads/'; //Das Upload-Verzeichnis
-                $filename = pathinfo($_FILES['datei']['name'], PATHINFO_FILENAME);
-                $extension = strtolower(pathinfo($_FILES['datei']['name'], PATHINFO_EXTENSION));
-            
-            
-                //Überprüfung der Dateiendung
-                $allowed_extensions = array('png', 'jpg', 'jpeg', 'gif');
-                if(!in_array($extension, $allowed_extensions)) {
-                    header("Location: projektbearbeiten.php?error=Ungültige Dateiendung. Nur png, jpg, jpeg und gif-Dateien sind erlaubt!");
                 }
-            
-                //Pfad zum Upload
-                $new_path = $upload_folder.$filename.'.'.$extension;
-            
-                //Neuer Dateiname falls die Datei bereits existiert
-                if(file_exists($new_path)) { //Falls Datei existiert, hänge eine Zahl an den Dateinamen
-                    $id = 1;
-                    do {
-                    $new_path = $upload_folder.$filename.'_'.$id.'.'.$extension;
-                    $id++;
-                    } while(file_exists($new_path));
-                }
-                $bild = $new_path;
-                //Alles okay, verschiebe Datei an neuen Pfad
-                move_uploaded_file($_FILES['datei']['tmp_name'], $new_path);
-          }
+                else{
+                    //Altes Bild löschen, wenn es nicht das Beispielbild ist.
+                    if($kurs["bild"] != "uploads/projekt.png"){
+                        @unlink($kurs["bild"]);
+                    }
+                    
+                    //Neues Bild hochladen.
+                    $upload_folder = 'uploads/'; //Das Upload-Verzeichnis
+                    $filename = pathinfo($_FILES['datei']['name'], PATHINFO_FILENAME);
+                    $extension = strtolower(pathinfo($_FILES['datei']['name'], PATHINFO_EXTENSION));
+                
+                
+                    //Überprüfung der Dateiendung
+                    $allowed_extensions = array('png', 'jpg', 'jpeg', 'gif');
+                    if(!in_array($extension, $allowed_extensions)) {
+                        header("Location: projektbearbeiten.php?error=Ungültige Dateiendung. Nur png, jpg, jpeg und gif-Dateien sind erlaubt!");
+                    }
+                
+                    //Pfad zum Upload
+                    $new_path = $upload_folder.$filename.'.'.$extension;
+                
+                    //Neuer Dateiname falls die Datei bereits existiert
+                    if(file_exists($new_path)) { //Falls Datei existiert, hänge eine Zahl an den Dateinamen
+                        $id = 1;
+                        do {
+                        $new_path = $upload_folder.$filename.'_'.$id.'.'.$extension;
+                        $id++;
+                        } while(file_exists($new_path));
+                    }
+                    $bild = $new_path;
+                    //Alles okay, verschiebe Datei an neuen Pfad
+                    move_uploaded_file($_FILES['datei']['tmp_name'], $new_path);
+            }
 
 
 
-        $db->updateKurs($_POST["IDK"], $name, $beschreibung, $kursleiter1, $kursleiter2, $kursleiter3, $teilnehmerzahl, $beschraenkung, $ort, $tag1, $tag2, $tag3, $von, $bis, $kosten, $bild);
+            $db->updateKurs($_POST["IDK"], $name, $beschreibung, $kursleiter1, $kursleiter2, $kursleiter3, $teilnehmerzahl, $beschraenkung, $ort, $tag1, $tag2, $tag3, $von, $bis, $kosten, $bild);
     }  
     
     

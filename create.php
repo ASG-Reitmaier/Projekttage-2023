@@ -5,8 +5,8 @@ require_once('search.php');
 $db = new DB();
 $titel = "Erstellung";
    
-    if(isset($_POST["name"]) && isset($_POST["beschreibung"]) && isset($_POST["kursleiter1"]) && isset($_POST["kursleiter2"]) && isset($_POST["kursleiter3"]) && isset($_POST["teilnehmerbegrenzung"]) && isset($_POST["ort"]) && isset($_POST["raum"]) && isset($_POST["tag"])&& isset($_POST["zeitraum_von"]) && isset($_POST["zeitraum_bis"]) && isset($_POST["kosten"])) {
-      if($_POST["name"]!="" && $_POST["beschreibung"]!="" && $_POST["kursleiter1"]!="" && $_POST["teilnehmerbegrenzung"]!="" && $_POST["ort"]!=""  && $_POST["zeitraum_von"]!="" && $_POST["zeitraum_bis"]!="" && $_POST["kosten"]!=""){ 
+if(isset($_POST["name"]) && isset($_POST["beschreibung"]) && isset($_POST["kursleiter1"]) && isset($_POST["kursleiter2"]) && isset($_POST["kursleiter3"]) && isset($_POST["teilnehmerbegrenzung"]) && isset($_POST["ort"]) && isset($_POST["raum"]) && isset($_POST["tag"])&& isset($_POST["zeitraum_von"]) && isset($_POST["zeitraum_bis"]) && isset($_POST["kosten"])) {
+    if($_POST["name"]!="" && $_POST["beschreibung"]!="" && $_POST["kursleiter1"]!="" && $_POST["teilnehmerbegrenzung"]!="" && $_POST["ort"]!=""  && $_POST["zeitraum_von"]!="" && $_POST["zeitraum_bis"]!="" && $_POST["kosten"]!=""){ 
         $name                   = $_POST["name"];
         $beschreibung           = $_POST["beschreibung"];
         $kursleiter1            = $_POST["kursleiter1"];
@@ -32,73 +32,62 @@ $titel = "Erstellung";
       
         if($kursleiter1 == "...")
         {
-          header("Location: create.php?error=Der Kurs benötigt einen Kursleiter!");
+            header("Location: create.php?error=Der Kurs benötigt einen Kursleiter!");
         } 
-          
-        if($jgst5==0 && $jgst6==0 && $jgst7==0 && $jgst8==0 && $jgst9==0 && $jgst10==0 && $jgst11==0)
+        else if($jgst5==0 && $jgst6==0 && $jgst7==0 && $jgst8==0 && $jgst9==0 && $jgst10==0 && $jgst11==0)
         {
-          header("Location: create.php?error=Es muss mindestens eine Jahrgangsstufe ausgewählt werden!");
+            header("Location: create.php?error=Es muss mindestens eine Jahrgangsstufe ausgewählt werden!");
         }
-          
-        if (!file_exists($_FILES['datei']['tmp_name']) || !is_uploaded_file($_FILES['datei']['tmp_name'])){
-          
-            $bild = "uploads/projekt.png";
-            
+        else if(!empty($db->pruefeRaum($_POST["tag"],$_POST["raum"])))
+        {
+            header("Location: create.php?error=Raum bereits vergeben!");
         }
         else{
-            $upload_folder = 'uploads/'; //Das Upload-Verzeichnis
-            $filename = pathinfo($_FILES['datei']['name'], PATHINFO_FILENAME);
-            $extension = strtolower(pathinfo($_FILES['datei']['name'], PATHINFO_EXTENSION));
-            
-            
-            //Überprüfung der Dateiendung
-            $allowed_extensions = array('png', 'jpg', 'jpeg', 'gif');
-            if(!in_array($extension, $allowed_extensions)) {
-            header("Location: create.php?error=Ungültige Dateiendung. Nur png, jpg, jpeg und gif-Dateien sind erlaubt!");
+            if (!file_exists($_FILES['datei']['tmp_name']) || !is_uploaded_file($_FILES['datei']['tmp_name'])){
+                $bild = "uploads/projekt.png";
             }
+            else{
+                $upload_folder = 'uploads/'; //Das Upload-Verzeichnis
+                $filename = pathinfo($_FILES['datei']['name'], PATHINFO_FILENAME);
+                $extension = strtolower(pathinfo($_FILES['datei']['name'], PATHINFO_EXTENSION));
             
-            //Pfad zum Upload
-            $new_path = $upload_folder.$filename.'.'.$extension;
             
-            //Neuer Dateiname falls die Datei bereits existiert
-            if(file_exists($new_path)) { //Falls Datei existiert, hänge eine Zahl an den Dateinamen
-                $id = 1;
-                do {
-                $new_path = $upload_folder.$filename.'_'.$id.'.'.$extension;
-                $id++;
-                } while(file_exists($new_path));
-            }
+                //Überprüfung der Dateiendung
+                $allowed_extensions = array('png', 'jpg', 'jpeg', 'gif');
+                if(!in_array($extension, $allowed_extensions)) {
+                    header("Location: create.php?error=Ungültige Dateiendung. Nur png, jpg, jpeg und gif-Dateien sind erlaubt!");
+                }
+            
+                //Pfad zum Upload
+                $new_path = $upload_folder.$filename.'.'.$extension;
+                
+                //Neuer Dateiname falls die Datei bereits existiert
+                if(file_exists($new_path)) { //Falls Datei existiert, hänge eine Zahl an den Dateinamen
+                    $id = 1;
+                    do {
+                    $new_path = $upload_folder.$filename.'_'.$id.'.'.$extension;
+                    $id++;
+                    } while(file_exists($new_path));
+                }
                 $bild = $new_path;
                 //Alles okay, verschiebe Datei an neuen Pfad
                 move_uploaded_file($_FILES['datei']['tmp_name'], $new_path);
-          }
-          
-          
-          
-
-        if($db->namePruefen($name))
-        {
-            
-            
-          $db->kursEinfuegen($name, $beschreibung, $kursleiter1, $kursleiter2, $kursleiter3, $teilnehmerbegrenzung, $ort, $raum, $tag1, $tag2, $tag3, $jgst5, $jgst6, $jgst7, $jgst8, $jgst9, $jgst10, $jgst11,$zeitraum_von, $zeitraum_bis, $kosten, $bild);
-            
-                
-
-         
-        header("Location: create.php?erfolg=Der Kurs wurde erfolgreich angelegt!");
+            }
+  
+            if($db->namePruefen($name))
+            {
+                $db->kursEinfuegen($name, $beschreibung, $kursleiter1, $kursleiter2, $kursleiter3, $teilnehmerbegrenzung, $ort, $raum, $tag1, $tag2, $tag3, $jgst5, $jgst6, $jgst7, $jgst8, $jgst9, $jgst10, $jgst11,$zeitraum_von, $zeitraum_bis, $kosten, $bild);
+                header("Location: create.php?erfolg=Der Kurs wurde erfolgreich angelegt!");
+            }
+            else{
+                header("Location: create.php?error=Dieser Kursname existiert bereits! Bitte wählen Sie einen anderen!");
+            }
         }
-        else
-        {
-          header("Location: create.php?error=Dieser Kursname existiert bereits! Bitte wählen Sie einen anderen!");
-        }
-
-         
-      } else{
-          header("Location: create.php?error=Bitte füllen Sie das Formular vollständig aus!");
+    } 
+    else{
+          header("Location: create.php?error=Bitte füllen Sie das Formular vollständig aus!");  
     }
-  }
-    
-    ?>
+} ?>
 
 <html lang="de">
 
@@ -120,7 +109,7 @@ $titel = "Erstellung";
 
 <body>
 
-    <?php include "header.php";?>
+<?php include "header.php";?>
 
     <?php if(isset($_GET['error'])){?>
     <div class="alert alert-danger fade show" style="margin: auto; width:50%" role="alert">
@@ -141,7 +130,7 @@ $titel = "Erstellung";
             <div style=" padding-left: 3%; padding-right: 3%" class="mb-3">
                 <label for="name" class="col col-form-label">Projektname</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" name="name" placeholder="">
+                    <input type="text" class="form-control" name="name" placeholder=<?php if(!empty($db->pruefeRaum("Tag_1", 12))){echo "passt";}?>>
                 </div>
             </div>
 
@@ -284,8 +273,8 @@ $titel = "Erstellung";
                                         <label class="input-group-text" for="Raum">Raum</label>
                                     </div>
                                     <select class="custom-select" id="raum" name="raum">
-                                        <option selected>ohne</option>
-                                        <?php $raeume = $db->zeigeFreieRaeume("Tag_1");
+                                        <option selected value = 0>ohne</option>
+                                        <?php $raeume = $db->zeigeRaeume();
                                         foreach($raeume AS $row) { ?>
                                         <option value="<?php echo $row['raum_id']?>"><?php echo $row['bezeichnung'] ?></option>
                                         <?php } ?>

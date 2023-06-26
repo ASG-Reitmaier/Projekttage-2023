@@ -181,10 +181,20 @@ class DB
         return $data;
     }
    
-    // Gibt das verschlüsselte Passwort eines Benutzers zurück. (+ Prevention of SQL Injection)
+    // Gibt den Raum zur übergebenen Id zurück. (+ Prevention of SQL Injection)
     public function nenneRaum($raum_id)
     {
         $query = "SELECT bezeichnung FROM raeume WHERE raum_id = $raum_id";
+        $statement = $this->con->prepare($query);
+        $statement->execute();
+        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    }
+
+    // Prüft, ob der Raum an diesem Tag schon gebucht ist. Wird leer ausgewählt, ist die Raum_Id 0. Ein Vergleich mit dem gespeicherten Wert NULL fällt daher negatv aus (+ Prevention of SQL Injection)
+    public function pruefeRaum($tag, $raum_id)
+    {
+        $query = "SELECT * FROM kurse WHERE $tag = 1 AND raum = $raum_id";
         $statement = $this->con->prepare($query);
         $statement->execute();
         $data = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -482,12 +492,14 @@ class DB
         $zeitraum_von=$zeitraum_von.":00";
         $zeitraum_bis=$zeitraum_bis.":00";
 
-        if($raum == "ohne"){
-            $raum = NULL;
+        if($raum == 0){
+            $eintrag = "INSERT INTO `kurse` (`name`, `bild`, `beschreibung`, `kursleiter1`, `kursleiter2`, `kursleiter3`, `teilnehmerzahl` ,`teilnehmerbegrenzung`, `jgst5`, `jgst6`,`jgst7`,`jgst8`,`jgst9`,`jgst10`,`jgst11`, `ort`, `Tag_1`, `Tag_2`, `Tag_3`,  `zeitraum_von`, `zeitraum_bis`, `kosten`) VALUES ('$name', '$bild', '$beschreibung', '$kursleiter1', '$kursleiter2', '$kursleiter3', 0, '$teilnehmerbegrenzung', '$jgst5','$jgst6', '$jgst7', '$jgst8', '$jgst9', '$jgst10', '$jgst11', '$ort' , '$tag1', '$tag2', '$tag3',  '$zeitraum_von', '$zeitraum_bis', '$kosten');";
+
+        }
+        else{
+            $eintrag = "INSERT INTO `kurse` (`name`, `bild`, `beschreibung`, `kursleiter1`, `kursleiter2`, `kursleiter3`, `teilnehmerzahl` ,`teilnehmerbegrenzung`, `jgst5`, `jgst6`,`jgst7`,`jgst8`,`jgst9`,`jgst10`,`jgst11`,`raum`, `ort`, `Tag_1`, `Tag_2`, `Tag_3`,  `zeitraum_von`, `zeitraum_bis`, `kosten`) VALUES ('$name', '$bild', '$beschreibung', '$kursleiter1', '$kursleiter2', '$kursleiter3', 0, '$teilnehmerbegrenzung', '$jgst5','$jgst6', '$jgst7', '$jgst8', '$jgst9', '$jgst10', '$jgst11','$raum', '$ort' , '$tag1', '$tag2', '$tag3',  '$zeitraum_von', '$zeitraum_bis', '$kosten');";
         }
         
-        $eintrag = "INSERT INTO `kurse` (`name`, `bild`, `beschreibung`, `kursleiter1`, `kursleiter2`, `kursleiter3`, `teilnehmerzahl` ,`teilnehmerbegrenzung`, `jgst5`, `jgst6`,`jgst7`,`jgst8`,`jgst9`,`jgst10`,`jgst11`,`raum`, `ort`, `Tag_1`, `Tag_2`, `Tag_3`,  `zeitraum_von`, `zeitraum_bis`, `kosten`) VALUES ('$name', '$bild', '$beschreibung', '$kursleiter1', '$kursleiter2', '$kursleiter3', 0, '$teilnehmerbegrenzung', '$jgst5','$jgst6', '$jgst7', '$jgst8', '$jgst9', '$jgst10', '$jgst11','$raum', '$ort' , '$tag1', '$tag2', '$tag3',  '$zeitraum_von', '$zeitraum_bis', '$kosten');";
-
         $statement = $this->con->prepare($eintrag);
         $statement->execute();
 
