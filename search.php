@@ -415,6 +415,16 @@ class DB
         return $data;
     }
     
+    // Liefert true, wenn der Raum an diesem Tag frei ist via MySQL query (+ Prevention of SQL Injection)
+    public function zeigeRaeumFrei($tag, $raum_id)
+    {
+        $query = "SELECT * FROM kurse WHERE Tag_1 = $tag AND raum = $raum_id";
+        $statement = $this->con->prepare($query);
+        $statement->execute();
+        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
+        return empty($data);
+    }
+
     // Gibt Alles von Raeume aus via MySQL query (+ Prevention of SQL Injection)
     public function zeigeRaeume()
     {
@@ -430,7 +440,7 @@ class DB
     public function zeigeFreieRaeume($tag)
     {
         $query = "SELECT * FROM raeume LEFT JOIN (SELECT raum FROM kurse WHERE $tag = 1) AS tagraeume
-        ON raeume.raum_id = tagraeume.raum WHERE tagraeume.raum IS NULL ORDER BY bezeichnung";
+        ON raeume.raum_id = tagraeume.raum ORDER BY bezeichnung";
         $statement = $this->con->prepare($query);
         $statement->execute();
         $data = $statement->fetchAll(PDO::FETCH_ASSOC);

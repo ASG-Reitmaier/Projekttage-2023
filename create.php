@@ -141,44 +141,40 @@ if(isset($_POST["name"]) && isset($_POST["beschreibung"]) && isset($_POST["kursl
                 </div>
             </div>
 
+
+
             <div style=" padding-left: 3%; padding-right: 18%" class="mb-3">
                 <label class="col col-form-label">Kursleiter</label>
 
-                <div class="input-group form-control">
-                    <div class="input-group-prepend" style="width:150px">
-                        <label class="input-group-text" for="kursleiter1">Erster Kursleiter</label>
-                    </div>
-                    <select class="custom-select" id="kursleiter1" name="kursleiter1">
+                <div class="input-group mb-2">
+                    <label class="input-group-text" for="kursleiter1">Erster Kursleiter</label>
+                    <select class="form-select" id="kursleiter1" name="kursleiter1">
                         <option selected>...</option>
                         <?php $lehrer = $db->zeigeLehrer();
                         foreach($lehrer AS $row) { ?>
-                        <option value="<?php echo $row['benutzer_id']?>"><?php echo $row['name'] ?></option>
+                            <option value="<?php echo $row['benutzer_id']?>"><?php echo $row['name'] ?></option>
                         <?php } ?>
                     </select>
                 </div>
 
-                <div class="input-group form-control">
-                    <div class="input-group-prepend" style="width:150px">
-                        <label class="input-group-text" for="kursleiter2">Zweiter Kursleiter</label>
-                    </div>
-                    <select class="custom-select" id="kursleiter2" name="kursleiter2">
+                <div class="input-group mb-2">
+                    <label class="input-group-text" for="kursleiter2">Zweiter Kursleiter</label>
+                    <select class="form-select" id="kursleiter2" name="kursleiter2">
                         <option selected>...</option>
                         <?php $lehrer = $db->zeigeLehrer();
                         foreach($lehrer AS $row) { ?>
-                        <option value="<?php echo $row['benutzer_id']?>"><?php echo $row['name'] ?></option>
+                            <option value="<?php echo $row['benutzer_id']?>"><?php echo $row['name'] ?></option>
                         <?php } ?>
                     </select>
                 </div>
 
-                <div class="input-group form-control">
-                    <div class="input-group-prepend" style="width:150px">
-                        <label class="input-group-text" for="kursleiter3">Dritter Kursleiter</label>
-                    </div>
-                    <select class="custom-select" id="kursleiter3" name="kursleiter3">
+                <div class="input-group mb-2">
+                    <label class="input-group-text" for="kursleiter3">Dritter Kursleiter</label>
+                    <select class="form-select" id="kursleiter3" name="kursleiter3">
                         <option selected>...</option>
                         <?php $lehrer = $db->zeigeLehrer();
                         foreach($lehrer AS $row) { ?>
-                        <option value="<?php echo $row['benutzer_id']?>"><?php echo $row['name'] ?></option>
+                            <option value="<?php echo $row['benutzer_id']?>"><?php echo $row['name'] ?></option>
                         <?php } ?>
                     </select>
                 </div>
@@ -236,10 +232,10 @@ if(isset($_POST["name"]) && isset($_POST["beschreibung"]) && isset($_POST["kursl
             </div>
 
             <div style=" padding-left: 3%; padding-right: 3%" class="mb-3">
-                <label for="zeit" class="col col-form-label">Zeit</label>
-                <div style="padding-bottom: 2%; width: 70%" class="mb-3 form-control">
-                    <div class="row align-items-end">
-                        <div class="col-sm-6">
+                <label for="zeit" class="col col-form-label">Zeit und Raum</label>
+                <div style="padding-bottom: 2%; width: 83%" class="mb-3 form-control">
+                    <div class="row">
+                        <div class="col-sm-4">
                             <div style=" padding-left: 3%; padding-right: 3%" class="col-8">
                                 <label for="zeitraum_von" class="col-form-label">Beginn:</label>
                                 <div class="col-sm-10">
@@ -256,31 +252,142 @@ if(isset($_POST["name"]) && isset($_POST["beschreibung"]) && isset($_POST["kursl
                         </div>
 
                         
-                        <div class="col-sm-6">
-                            <div class="input-group form-control" style="width:220px">
-                                    <div class="input-group-prepend" style="width:80px">
-                                        <label class="input-group-text" for="Tag">Tag</label>
-                                    </div>
-                                    <select class="custom-select" id="tagDropdown" name="tag">
-                                        <option selected value="Tag_1">Montag</option>                                      
-                                        <option value="Tag_2">Dienstag</option>  
-                                        <option value="Tag_3">Mittwoch</option>  
-                                    </select>
-                            </div> 
+                        <div class="col-sm-4">
 
-                            <div class="input-group form-control" style="width:220px">
-                                    <div class="input-group-prepend" style="width:80px">
-                                        <label class="input-group-text" for="Raum">Raum</label>
-                                    </div>
-                                    <select class="custom-select" id="raum" name="raum">
-                                        <option selected value = 0>ohne</option>
-                                        <?php $raeume = $db->zeigeRaeume();
-                                        foreach($raeume AS $row) { ?>
-                                        <option value="<?php echo $row['raum_id']?>"><?php echo $row['bezeichnung'] ?></option>
-                                        <?php } ?>
-                                    </select>
+                            <label for="tag" class="col-form-label">Tag:</label>
+                            <div class="input-group mb-3">
+                                <label class="input-group-text" for="tag">Tag</label>
+                                <select class="form-select" id="tag" name="tag">
+                                    <option selected value="Tag_1">Montag</option>
+                                     <option value="Tag_2">Dienstag</option>
+                                    <option value="Tag_3">Mittwoch</option>
+                                </select>
                             </div>
-                                
+
+                            <label for="raum" class="col-form-label">Raum (optional):</label>
+                            <div class="input-group mb-3">
+                                <label class="input-group-text" for="raum">Raum</label>
+                                <select class="form-select" id="raum" name="raum">
+                                    <option selected value=0>ohne</option>
+                                    <?php $raeume = $db->zeigeRaeume();
+                                        foreach($raeume AS $row) { ?>
+                                    <option value="<?php echo $row['raum_id']?>"><?php echo $row['bezeichnung'] ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+
+                            <label for="raumplanung" class="col-form-label">Raumplanung:</label>
+                            <!-- Button trigger modal -->
+
+                            <div style=" padding-left: 3%; padding-right: 3%" class="col">
+
+                            <!-- ErsterButton -->
+                            <button type="button" class="btn btn-success" style=" margin-bottom: 1%;" data-bs-toggle="modal" data-bs-target="#modalMontag">
+                                Montag
+                            </button>
+
+                            <!-- Modal Montag -->
+                            <div class="modal fade" id="modalMontag" tabindex="-1" role="dialog" aria-labelledby="modalMontag" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="modalMontag">Raumplanung Montag</h5>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <?php $freieRaeumeMo = $db->zeigeFreieRaeume("Tag_1");
+                                                foreach($freieRaeumeMo AS $row) { ?>
+                                                <div class="col">
+                                                    <?php if($row["raum"] > 0 ){?>
+                                                    <div class="alert alert-danger"><?php echo $row['bezeichnung'] ?></div>
+                                                    <?php } else { ?>
+                                                    <div class="alert alert-secondary"><?php echo $row['bezeichnung'] ?></div>
+                                                    <?php } ?>
+                                                </div>
+                                                <?php } ?>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- ZweiterButton -->
+                            <button type="button" class="btn btn-success" style=" margin-bottom: 1%;" data-bs-toggle="modal" data-bs-target="#modalDienstag">
+                                Dienstag
+                            </button>
+
+                            <!-- Modal Dienstag -->
+                            <div class="modal fade" id="modalDienstag" tabindex="-1" role="dialog" aria-labelledby="modalDienstag" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="modalDienstag">Raumplanung Montag</h5>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <?php $freieRaeumeMo = $db->zeigeFreieRaeume("Tag_2");
+                                                foreach($freieRaeumeMo AS $row) { ?>
+                                                <div class="col">
+                                                    <?php if($row["raum"] > 0 ){?>
+                                                    <div class="alert alert-danger"><?php echo $row['bezeichnung'] ?></div>
+                                                    <?php } else { ?>
+                                                    <div class="alert alert-secondary"><?php echo $row['bezeichnung'] ?></div>
+                                                    <?php } ?>
+                                                </div>
+                                                <?php } ?>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- ErsterButton -->
+                            <button type="button" class="btn btn-success" style=" margin-bottom: 1%;" data-bs-toggle="modal" data-bs-target="#modalMittwoch">
+                                Mittwoch
+                            </button>
+
+                            <!-- Modal Montag -->
+                            <div class="modal fade" id="modalMittwoch" tabindex="-1" role="dialog" aria-labelledby="modalMittwoch" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="modalMittwoch">Raumplanung Montag</h5>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <?php $freieRaeumeMo = $db->zeigeFreieRaeume("Tag_3");
+                                                foreach($freieRaeumeMo AS $row) { ?>
+                                                <div class="col">
+                                                    <?php if($row["raum"] > 0 ){?>
+                                                    <div class="alert alert-danger"><?php echo $row['bezeichnung'] ?></div>
+                                                    <?php } else { ?>
+                                                    <div class="alert alert-secondary"><?php echo $row['bezeichnung'] ?></div>
+                                                    <?php } ?>
+                                                </div>
+                                                <?php } ?>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+
+                            </div>
                         </div>
                     </div>
                 </div>
