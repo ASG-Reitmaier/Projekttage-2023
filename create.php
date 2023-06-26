@@ -147,7 +147,7 @@ if(isset($_POST["name"]) && isset($_POST["beschreibung"]) && isset($_POST["kursl
                 <label class="col col-form-label">Kursleiter</label>
 
                 <div class="input-group mb-2">
-                    <label class="input-group-text" for="kursleiter1">Erster Kursleiter</label>
+                    <label class="input-group-text" for="kursleiter1" style="width:150px">Erster Kursleiter</label>
                     <select class="form-select" id="kursleiter1" name="kursleiter1">
                         <option selected>...</option>
                         <?php $lehrer = $db->zeigeLehrer();
@@ -158,7 +158,7 @@ if(isset($_POST["name"]) && isset($_POST["beschreibung"]) && isset($_POST["kursl
                 </div>
 
                 <div class="input-group mb-2">
-                    <label class="input-group-text" for="kursleiter2">Zweiter Kursleiter</label>
+                    <label class="input-group-text" for="kursleiter2" style="width:150px">Zweiter Kursleiter</label>
                     <select class="form-select" id="kursleiter2" name="kursleiter2">
                         <option selected>...</option>
                         <?php $lehrer = $db->zeigeLehrer();
@@ -169,7 +169,7 @@ if(isset($_POST["name"]) && isset($_POST["beschreibung"]) && isset($_POST["kursl
                 </div>
 
                 <div class="input-group mb-2">
-                    <label class="input-group-text" for="kursleiter3">Dritter Kursleiter</label>
+                    <label class="input-group-text" for="kursleiter3" style="width:150px">Dritter Kursleiter</label>
                     <select class="form-select" id="kursleiter3" name="kursleiter3">
                         <option selected>...</option>
                         <?php $lehrer = $db->zeigeLehrer();
