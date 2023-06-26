@@ -130,7 +130,7 @@ if(isset($_POST["name"]) && isset($_POST["beschreibung"]) && isset($_POST["kursl
             <div style=" padding-left: 3%; padding-right: 3%" class="mb-3">
                 <label for="name" class="col col-form-label">Projektname</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" name="name" placeholder=<?php if(!empty($db->pruefeRaum("Tag_1", 12))){echo "passt";}?>>
+                    <input type="text" class="form-control" name="name" placeholder="">
                 </div>
             </div>
 
@@ -231,7 +231,7 @@ if(isset($_POST["name"]) && isset($_POST["beschreibung"]) && isset($_POST["kursl
             <div style=" padding-left: 3%; padding-right: 3%" class="mb-3">
                 <label for="ort" class="col col-form-label">Ort</label>
                 <div class="col-sm-10">
-                    <input class="form-control" name="ort" value="Adalbert-Stifter-Gymnasium">
+                    <input class="form-control" name="ort" value="ASG">
                 </div>
             </div>
 

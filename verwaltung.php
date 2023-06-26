@@ -213,9 +213,7 @@ if(isset($_POST["IDKL"])){
                 <th>Teilnehmer</th>
                 <th>Jahrgangstufen</th>
                 <th>Ort</th>
-                <th>Tag 1</th>
-                <th>Tag 2</th>
-                <th>Tag 3</th>
+                <th>Tag</th>
                 <th>Kosten</th>
                 <th></th>
                 <th></th>
@@ -233,12 +231,22 @@ if(isset($_POST["IDKL"])){
                       echo $row["teilnehmerzahl"]." von ".$row["teilnehmerbegrenzung"]; 
                      ?>
                 </td> 
-                <td><?php echo $row["jahrgangsstufen_beschraenkung"]; ?> </td>
-                <td><?php echo $row["ort"]; ?> </td>
+                <?php $jgst = "";
+                    if($row["jgst5"]==1){$jgst = $jgst."5, ";} 
+                    if($row["jgst6"]==1){$jgst = $jgst."6, ";} 
+                    if($row["jgst7"]==1){$jgst = $jgst."7, ";} 
+                    if($row["jgst8"]==1){$jgst = $jgst."8, ";} 
+                    if($row["jgst9"]==1){$jgst = $jgst."9, ";} 
+                    if($row["jgst10"]==1){$jgst = $jgst."10, ";} 
+                    if($row["jgst11"]==1){$jgst = $jgst."11, ";} 
+                    $jgst = substr($jgst,0,-2);
+                ?>
+                <td> <?php echo $jgst; ?></td>
+                <td> <?php echo $row["ort"]; if($row["raum"]!= NULL){echo " (".$db->nenneRaum($row["raum"])[0]["bezeichnung"].")";};?></td>
                 <?php
-                    if($row["Tag_1"]==1){echo"<td>Ja</td>";}else{echo "<td>Nein</td>";}
-                    if($row["Tag_2"]==1){echo"<td>Ja</td>";}else{echo "<td>Nein</td>";}
-                    if($row["Tag_2"]==1){echo"<td>Ja</td>";}else{echo "<td>Nein</td>";}
+                    if($row["Tag_1"]==1){echo"<td>Mo</td>";}
+                    elseif($row["Tag_2"]==1){echo"<td>Di</td>";}
+                    elseif($row["Tag_3"]==1){echo"<td>Mit</td>";}
                  ?>
                 <td><?php echo $row["kosten"]; ?> </td>
                 <td>
