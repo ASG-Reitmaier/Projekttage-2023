@@ -331,6 +331,7 @@ $titel = "Projektverwaltung";
                                             if($raum_id>0){echo "<option selected value=".$raum_id.">".$db->nenneRaum($raum_id)[0]["bezeichnung"]."</option>";}
                                             else{echo "<option selected value=0> ohne </option>";}
                                     ?>
+                                    <option value=0>ohne</option>
                                     <?php $raeume = $db->zeigeRaeume();
                                         foreach($raeume AS $row) { ?>
                                         <option value="<?php echo $row['raum_id']?>"><?php echo $row['bezeichnung'] ?></option>

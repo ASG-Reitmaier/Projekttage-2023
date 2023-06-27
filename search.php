@@ -216,9 +216,15 @@ class DB
     
     // Änderung von Kursdaten via MySQL query (+ Prevention of SQL Injection)
     public function updateKurs($id, $name, $beschreibung, $kursleiter1, $kursleiter2, $kursleiter3, $teilnehmerbegrenzung, $ort, $raum, $tag1, $tag2, $tag3, $jgst5, $jgst6, $jgst7, $jgst8, $jgst9, $jgst10, $jgst11, $zeitraum_von, $zeitraum_bis, $kosten, $bild)
-    {                               
-    
-        $query = "UPDATE kurse SET name = '$name', beschreibung = '$beschreibung', kursleiter1 = '$kursleiter1', kursleiter2 = '$kursleiter2', kursleiter3 = '$kursleiter3', teilnehmerbegrenzung =  '$teilnehmerbegrenzung', ort = '$ort', raum = '$raum',Tag_1 = '$tag1', Tag_2 = '$tag2', Tag_3 = '$tag3', jgst5 = '$jgst5', jgst6 = '$jgst6', jgst7 = '$jgst7', jgst8 = '$jgst8', jgst9 = '$jgst9', jgst10 = '$jgst10', jgst11 = '$jgst11' ,kosten = '$kosten', bild ='$bild', zeitraum_von = '$zeitraum_von', zeitraum_bis = '$zeitraum_bis' WHERE kurse.kurs_id = $id";
+    {                 
+        
+        if($raum == 0){
+            $query = "UPDATE kurse SET name = '$name', beschreibung = '$beschreibung', kursleiter1 = '$kursleiter1', kursleiter2 = '$kursleiter2', kursleiter3 = '$kursleiter3', teilnehmerbegrenzung =  '$teilnehmerbegrenzung', ort = '$ort', raum = NULL, Tag_1 = '$tag1', Tag_2 = '$tag2', Tag_3 = '$tag3', jgst5 = '$jgst5', jgst6 = '$jgst6', jgst7 = '$jgst7', jgst8 = '$jgst8', jgst9 = '$jgst9', jgst10 = '$jgst10', jgst11 = '$jgst11' ,kosten = '$kosten', bild ='$bild', zeitraum_von = '$zeitraum_von', zeitraum_bis = '$zeitraum_bis' WHERE kurse.kurs_id = $id";
+        
+        }
+        else{
+            $query = "UPDATE kurse SET name = '$name', beschreibung = '$beschreibung', kursleiter1 = '$kursleiter1', kursleiter2 = '$kursleiter2', kursleiter3 = '$kursleiter3', teilnehmerbegrenzung =  '$teilnehmerbegrenzung', ort = '$ort', raum = '$raum',Tag_1 = '$tag1', Tag_2 = '$tag2', Tag_3 = '$tag3', jgst5 = '$jgst5', jgst6 = '$jgst6', jgst7 = '$jgst7', jgst8 = '$jgst8', jgst9 = '$jgst9', jgst10 = '$jgst10', jgst11 = '$jgst11' ,kosten = '$kosten', bild ='$bild', zeitraum_von = '$zeitraum_von', zeitraum_bis = '$zeitraum_bis' WHERE kurse.kurs_id = $id";
+        }
         
         try {
             $statement = $this->con->prepare($query);
