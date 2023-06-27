@@ -17,7 +17,7 @@ $titel = "Projektverwaltung";
     <meta name="author" content="">
     <link rel="shortcut icon" href="img/asg-logo.jpg" type="image/x-icon" />
 
-    <title>Erstellung</title>
+    <title>Projektverwaltung</title>
 
     <!-- CSS von Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
