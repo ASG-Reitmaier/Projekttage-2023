@@ -202,6 +202,7 @@ $teilnehmerzahl = $db->zeigeTeilnehmerzahl($kurs_id);
                 </div>
 
 
+                
                 <div class="container" style="float: left; width:96%">
                     <table class="table">
                         <thead>
