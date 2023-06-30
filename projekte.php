@@ -7,6 +7,7 @@ $titel = "Projektübersicht";
 if(isset($_POST["kursloeschen"])){
     $db->loescheKurs($_POST["kursloeschen"]);
 }
+
 ?>
 
 <html lang="de">
@@ -50,11 +51,11 @@ if(isset($_POST["kursloeschen"])){
 
     <?php include "header.php";?>
     <div>
-        <nav class=" navbar navbar-light bg-light">
-            <div class="container-fluid">
-                <form class="d-flex" action="projekte.php" method="POST">
-                    <input class="form-control me-2" type="search" placeholder="Suche..." aria-label="Search" name="search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
+        <form class="d-flex" action="projekte.php" method="POST">
+            <div class="container p-3">
+                <div class="row justify-content-md-center align-items-center">
+                <div class="col mr-5">
+                    <button class="btn btn-success  mt-2" type="submit">Anzeigen</button>
                     <div class="icons-c">
                         <div class="icon-search"></div>
                         <div class="icon-close" onclick="document.getElementById('search').value = ''">
@@ -62,18 +63,84 @@ if(isset($_POST["kursloeschen"])){
                             <div class="x-down"></div>
                         </div>
                     </div>
-                </form>
+                </div>
+                <div class="col mr-5 ">
+                    <label for="suche" class="col col-form-label">Textinhalt:</label>
+                    <input class="form-control ml-2" type="search" placeholder="Suche..." aria-label="Search" name="suche">             
+                </div>
+                <div class="col mr-5">
+                <label for="jahrgangsstufen_beschraenkung" class="col col-form-label">Jahrgangsstufen:</label>
+                    <div class="d-flex">                 
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" name="jgst5" value="option1"  <?php if(isset($_POST["jgst5"])){ ?> checked <?php }; ?> >
+                            <label class="form-check-label" for="jgst5">5</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" name="jgst6" value="option2" <?php if(isset($_POST["jgst6"])){ ?> checked <?php }; ?> >
+                            <label class="form-check-label" for="jgst6">6</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" name="jgst7" value="option3" <?php if(isset($_POST["jgst7"])){ ?> checked <?php }; ?> >
+                            <label class="form-check-label" for="jgst7">7 </label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" name="jgst8" value="option4" <?php if(isset($_POST["jgst8"])){ ?> checked <?php }; ?> >
+                            <label class="form-check-label" for="jgst8">8 </label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" name="jgst9" value="option5" <?php if(isset($_POST["jgst9"])){ ?> checked <?php }; ?> >
+                            <label class="form-check-label" for="jgst9">9 </label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" name="jgst10" value="option6" <?php if(isset($_POST["jgst10"])){ ?> checked <?php }; ?> >
+                            <label class="form-check-label" for="jgst10">10 </label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" name="jgst11" value="option7" <?php if(isset($_POST["jgst11"])){ ?> checked <?php }; ?> >
+                            <label class="form-check-label" for="jgst11">11 </label>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col mr-5">
+                <label for="jahrgangsstufen_beschraenkung" class="col col-form-label">Wochentage:</label>
+                    <div class="d-flex" >                 
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" name="Montag" value="option1" <?php if(isset($_POST["Montag"])){ ?> checked <?php }; ?> >
+                            <label class="form-check-label" for="Montag">Montag</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" name="Dienstag" value="option2" <?php if(isset($_POST["Dienstag"])){ ?> checked <?php }; ?> >
+                            <label class="form-check-label" for="Dienstag">Dienstag</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" name="Mittwoch" value="option3" <?php if(isset($_POST["Mittwoch"])){ ?> checked <?php }; ?> >
+                            <label class="form-check-label" for="Mittwoch">Mittwoch </label>
+                        </div>
+                    </div>
+                    </div>
+                    </div>
             </div>
-        </nav>
-        <br>
+            </form>
 
-
-
+            <hr class="hr" />
     <?php
-    if(isset($_POST["search"]))
+
+    if(isset($_POST["jgst5"])){$jgst5=1;} else{$jgst5=0;};
+    if(isset($_POST["jgst6"])){$jgst6=1;} else{$jgst6=0;};
+    if(isset($_POST["jgst7"])){$jgst7=1;} else{$jgst7=0;};
+    if(isset($_POST["jgst8"])){$jgst8=1;} else{$jgst8=0;};
+    if(isset($_POST["jgst9"])){$jgst9=1;} else{$jgst9=0;};
+    if(isset($_POST["jgst10"])){$jgst10=1;} else{$jgst10=0;};
+    if(isset($_POST["jgst11"])){$jgst11=1;} else{$jgst11=0;};
+    if(isset($_POST["Montag"])){$Montag=1;} else{$Montag=0;};
+    if(isset($_POST["Dienstag"])){$Dienstag=1;} else{$Dienstag=0;};
+    if(isset($_POST["Mittwoch"])){$Mittwoch=1;} else{$Mittwoch=0;};
+
+    if(isset($_POST["suche"]) )
     {
-        $suchbegriff = $_POST["search"];
-        $suchDaten = $db->suche($suchbegriff);
+        $suchbegriff = $_POST["suche"];
+        $suchDaten = $db->suche($suchbegriff, $jgst5, $jgst6, $jgst7, $jgst8, $jgst9, $jgst10, $jgst11, $Montag, $Dienstag, $Mittwoch);
     ?>
 
 

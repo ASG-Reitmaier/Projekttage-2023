@@ -567,7 +567,40 @@ class DB
     }
 
 
-    public function suche($suchbegriff){
+    public function suche($suchbegriff, $jgst5, $jgst6, $jgst7, $jgst8, $jgst9, $jgst10, $jgst11, $Montag, $Dienstag, $Mittwoch){
+
+        $queryjgst = "";
+        if($jgst5 == 1||$jgst6 == 1||$jgst7 == 1||$jgst8 == 1||$jgst9 == 1||$jgst10 == 1||$jgst11 == 1){
+            if($jgst5 == 1){if($queryjgst == ""){$queryjgst = $queryjgst."jgst5 = 1";}else{$queryjgst = $queryjgst." OR jgst5 = 1";}}
+            if($jgst6 == 1){if($queryjgst == ""){$queryjgst = $queryjgst."jgst6 = 1";}else{$queryjgst = $queryjgst." OR jgst6 = 1";}}
+            if($jgst7 == 1){if($queryjgst == ""){$queryjgst = $queryjgst."jgst7 = 1";}else{$queryjgst = $queryjgst." OR jgst7 = 1";}}
+            if($jgst8 == 1){if($queryjgst == ""){$queryjgst = $queryjgst."jgst8 = 1";}else{$queryjgst = $queryjgst." OR jgst8 = 1";}}
+            if($jgst9 == 1){if($queryjgst == ""){$queryjgst = $queryjgst."jgst9 = 1";}else{$queryjgst = $queryjgst." OR jgst9 = 1";}}
+            if($jgst10 == 1){if($queryjgst == ""){$queryjgst = $queryjgst."jgst10 = 1";}else{$queryjgst = $queryjgst." OR jgst10 = 1";}}
+            if($jgst11 == 1){if($queryjgst == ""){$queryjgst = $queryjgst."jgst11 = 1";}else{$queryjgst = $queryjgst." OR jgst11 = 1";}}
+        }
+        
+        $querytage = "";
+        if($Montag == 1||$Dienstag == 1||$Mittwoch == 1){
+            if($Montag == 1){if($querytage == ""){$querytage = $querytage."Tag_1 = 1";}else{$querytage = $querytage." OR Tag_1 = 1";}}
+            if($Dienstag == 1){if($querytage == ""){$querytage = $querytage."Tag_2 = 1";}else{$querytage = $querytage." OR Tag_2 = 1";}}
+            if($Mittwoch == 1){if($querytage == ""){$querytage = $querytage."Tag_3 = 1";}else{$querytage = $querytage." OR Tag_3 = 1";}}
+        
+        }
+        
+        if($queryjgst == ""){$queryjgst  = "true";}
+        if($querytage == ""){$querytage  = "true";}
+
+        $query = "  SELECT DISTINCT kurse.kurs_id, kurse.name, kurse.bild
+                    FROM kurse
+                    WHERE (".$querytage.") AND (".$queryjgst.") AND (LOWER(kurse.beschreibung) LIKE LOWER(:begriff) OR LOWER(kurse.name) LIKE LOWER(:begriff))";
+        $statement = $this->con->prepare($query);
+        $statement->execute(["begriff"=>"%".$suchbegriff."%"]);
+        $date = $statement->fetchAll(PDO::FETCH_ASSOC);
+        return $date;
+    }
+
+    public function sucheBegriff($suchbegriff){
         $query = "  SELECT DISTINCT kurse.kurs_id, kurse.name, kurse.bild
                     FROM kurse
                     WHERE (LOWER(kurse.beschreibung) LIKE LOWER(:begriff) OR LOWER(kurse.name) LIKE LOWER(:begriff))";
@@ -575,7 +608,6 @@ class DB
         $statement->execute(["begriff"=>"%".$suchbegriff."%"]);
         $date = $statement->fetchAll(PDO::FETCH_ASSOC);
         return $date;
-
     }
     
     //Meldet den Benutzer ab.
