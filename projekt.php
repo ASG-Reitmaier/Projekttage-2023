@@ -246,8 +246,7 @@ $teilnehmerzahl = $db->zeigeTeilnehmerzahl($kurs_id);
                 <div class="container" style="float: left; width: 100%; margin-top: 30px;">
 
 
-                    <?php $timestamp = time(); if($benutzerrolle == "schueler" && $timestamp >= 1688486400 && $timestamp<=1688745600){
-                    
+                    <?php $timestamp = time(); if($benutzerrolle == "schueler" && $timestamp<=1688745600 && $timestamp >= 1688572800){
                     if($db->zeigeAngemeldet($kurs_id , $benutzer_id)) { ?>
 
                     <form action=" ../projekt.php/?id=<?php echo $_GET['id'];?>" method="post" enctype="multipart/form-data">

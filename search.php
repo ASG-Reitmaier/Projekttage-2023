@@ -537,6 +537,7 @@ class DB
 
     public function namePruefen($name)
     {
+        $name = addslashes($name);
         $query = "SELECT * FROM kurse WHERE name='$name' ORDER BY name";
         $statement = $this->con->prepare($query);
         $statement->execute();
@@ -568,7 +569,7 @@ class DB
 
 
     public function suche($suchbegriff, $jgst5, $jgst6, $jgst7, $jgst8, $jgst9, $jgst10, $jgst11, $Montag, $Dienstag, $Mittwoch){
-
+        $suchbegriff = addslashes($suchbegriff);
         $queryjgst = "";
         if($jgst5 == 1||$jgst6 == 1||$jgst7 == 1||$jgst8 == 1||$jgst9 == 1||$jgst10 == 1||$jgst11 == 1){
             if($jgst5 == 1){if($queryjgst == ""){$queryjgst = $queryjgst."jgst5 = 1";}else{$queryjgst = $queryjgst." OR jgst5 = 1";}}
@@ -592,8 +593,8 @@ class DB
         if($querytage == ""){$querytage  = "true";}
 
         $query = "  SELECT DISTINCT kurse.kurs_id, kurse.name, kurse.bild
-                    FROM kurse
-                    WHERE (".$querytage.") AND (".$queryjgst.") AND (LOWER(kurse.beschreibung) LIKE LOWER(:begriff) OR LOWER(kurse.name) LIKE LOWER(:begriff))";
+                    FROM kurse, benutzer
+                    WHERE (kurse.kursleiter1 = benutzer.benutzer_id) AND (".$querytage.") AND (".$queryjgst.") AND (LOWER(kurse.beschreibung) LIKE LOWER(:begriff) OR LOWER(kurse.name) LIKE LOWER(:begriff) OR LOWER(benutzer.name) LIKE LOWER(:begriff)) ORDER BY kurse.name";
         $statement = $this->con->prepare($query);
         $statement->execute(["begriff"=>"%".$suchbegriff."%"]);
         $date = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -623,7 +624,7 @@ class DB
             $query = "UPDATE kurse SET teilnehmerzahl = teilnehmerzahl - 1 WHERE kurs_id=$kurs_id";
             $statement = $this->con->prepare($query);
             $statement->execute();
-        return "<div class='alert alert-success alert-dismissible fade show' role='alert'> $name wurde erfolgreich abgemeldet!  </div>";
+        return "<div class='alert alert-success alert-dismissible fade show' role='alert'> Du wurdest erfolgreich abgemeldet!  </div>";
         }
         else{
             return "<div class='alert alert-danger alert-dismissible fade show' role='alert'> $name konnte nicht abgemeldet werden!  </div>";
@@ -639,84 +640,102 @@ class DB
         $statement->execute();
         $data = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-        $query = "SELECT teilnehmerbegrenzung FROM kurse WHERE kurs_id=$kurs_id";
+        $query = "SELECT teilnehmerbegrenzung, jgst5, jgst6, jgst7, jgst8, jgst9, jgst10, jgst11 FROM kurse WHERE kurs_id=$kurs_id";
         $statement = $this->con->prepare($query);
         $statement->execute();
         $datu = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-       
+        $query = "SELECT klasse FROM benutzer WHERE benutzer_id=$benutzer_id";
+        $statement = $this->con->prepare($query);
+        $statement->execute();
+        $dato = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-        if($data[0]["COUNT(*)"]>=$datu[0]["teilnehmerbegrenzung"])
+        //Jahrgangsstufe ermitteln.
+        if($dato[0]["klasse"] == 5){$jgst = "jgst5";}
+        elseif($dato[0]["klasse"] == 6){$jgst = "jgst6";}
+        elseif($dato[0]["klasse"] == 7){$jgst = "jgst7";}
+        elseif($dato[0]["klasse"] == 8){$jgst = "jgst8";}
+        elseif($dato[0]["klasse"] == 9){$jgst = "jgst9";}
+        elseif($dato[0]["klasse"] == 10){$jgst = "jgst10";}
+        elseif($dato[0]["klasse"] == 11){$jgst = "jgst11";}
+
+        //Jahrgangsstufe prüfen.
+        if($datu[0][$jgst]!=1)
         {
-            $ausgabe = $ausgabe."<div class='alert alert-danger alert-dismissible fade show' role='alert'> Der Kurs ist voll!   </div>";
+            $ausgabe = $ausgabe."<div class='alert alert-danger alert-dismissible fade show' role='alert'> Der Kurs entspricht nicht deiner Jahrgangsstufe! </div>";
         }
-
-        if($data[0]["COUNT(*)"]<$datu[0]["teilnehmerbegrenzung"])
-        {
-            //Liefert alle Kurse des Schülers
-            $query = "SELECT kurs_id FROM benutzer_zu_kurse WHERE b_id=$benutzer_id";
-            $statement = $this->con->prepare($query);
-            $statement->execute();
-            $b_kurse = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-            //Liefert, ob der gewählte Kurs am 1. Tag stattfindet (0 oder 1)
-            $query = "SELECT Tag_1 FROM kurse WHERE kurs_id=$kurs_id";
-            $statement = $this->con->prepare($query);
-            $statement->execute();
-            $tag1_pr = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-            //Liefert, ob der gewählte Kurs am 2. Tag stattfindet (0 oder 1)
-            $query = "SELECT Tag_2 FROM kurse WHERE kurs_id=$kurs_id";
-            $statement = $this->con->prepare($query); 
-            $statement->execute();
-            $tag2_pr = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-            //Liefert, ob der gewählte Kurs am 3. Tag stattfindet (0 oder 1)
-            $query = "SELECT Tag_3 FROM kurse WHERE kurs_id=$kurs_id";
-            $statement = $this->con->prepare($query);
-            $statement->execute();
-            $tag3_pr = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-            
-
-            $test=true;
-
-            //Prüft, ob der Schüler am Tag des gewählten Kurses bereits einen anderen Kurs gebucht hat. Hierzu werden alle gebuchten Kurse des Schülers (aus $b_kurse) durchlaufen.
-            foreach ($b_kurse AS $row) 
-            {     
-                $b=$row["kurs_id"];
-               
-                //Liefert, ob der bereits gebuchte Kurs am 1. Tag stattfindet (0 oder 1)
-                $query = "SELECT Tag_1 FROM kurse WHERE kurs_id=$b";
+        else{
+            //Teilnehmerbegrenzung prüfen.
+            if($data[0]["COUNT(*)"]>=$datu[0]["teilnehmerbegrenzung"])
+            {
+                $ausgabe = $ausgabe."<div class='alert alert-danger alert-dismissible fade show' role='alert'> Der Kurs ist voll!   </div>";
+            }
+            else{
+                //Liefert alle Kurse des Schülers
+                $query = "SELECT kurs_id FROM benutzer_zu_kurse WHERE b_id=$benutzer_id";
                 $statement = $this->con->prepare($query);
                 $statement->execute();
-                $tag1 = $statement->fetchAll(PDO::FETCH_ASSOC);
+                $b_kurse = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-                //Liefert, ob der bereits gebuchte Kurs am 2. Tag stattfindet (0 oder 1)
-                $query = "SELECT Tag_2 FROM kurse WHERE kurs_id=$b";
+                //Liefert, ob der gewählte Kurs am 1. Tag stattfindet (0 oder 1)
+                $query = "SELECT Tag_1 FROM kurse WHERE kurs_id=$kurs_id";
                 $statement = $this->con->prepare($query);
                 $statement->execute();
-                $tag2 = $statement->fetchAll(PDO::FETCH_ASSOC);
+                $tag1_pr = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-                //Liefert, ob der bereits gebuchte Kurs am 3. Tag stattfindet (0 oder 1)
-                $query = "SELECT Tag_3 FROM kurse WHERE kurs_id=$b";
+                //Liefert, ob der gewählte Kurs am 2. Tag stattfindet (0 oder 1)
+                $query = "SELECT Tag_2 FROM kurse WHERE kurs_id=$kurs_id";
+                $statement = $this->con->prepare($query); 
+                $statement->execute();
+                $tag2_pr = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+                //Liefert, ob der gewählte Kurs am 3. Tag stattfindet (0 oder 1)
+                $query = "SELECT Tag_3 FROM kurse WHERE kurs_id=$kurs_id";
                 $statement = $this->con->prepare($query);
                 $statement->execute();
-                $tag3 = $statement->fetchAll(PDO::FETCH_ASSOC);
+                $tag3_pr = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-               
-                //Testet, ob es Überschneidungen gibt. Falls ja, wird der test auf false gesetzt, damit der Benutzer am Ende nicht eingefügt wird.
-                if($tag1_pr[0]["Tag_1"]==1 AND $tag1[0]["Tag_1"]==1){
-                    $test=false;
-                    $ausgabe = $ausgabe."<div class='alert alert-danger alert-dismissible fade show' role='alert'>An Tag 1 hast du bereits einen Kurs gebucht!   </div>";
-                }
-                if($tag2_pr[0]["Tag_2"]==1 AND $tag2[0]["Tag_2"]==1){
-                    $test=false;
-                    $ausgabe = $ausgabe."<div class='alert alert-danger alert-dismissible fade show' role='alert'>An Tag 2 hast du bereits einen Kurs gebucht!   </div>";
-                }
-                if($tag3_pr[0]["Tag_3"]==1 AND $tag3[0]["Tag_3"]==1){
-                    $test=false;
-                    $ausgabe = $ausgabe."<div class='alert alert-danger alert-dismissible fade show' role='alert'>An Tag 3 hast du bereits einen Kurs gebucht!   </div>";
+                
+
+                $test=true;
+
+                //Prüft, ob der Schüler am Tag des gewählten Kurses bereits einen anderen Kurs gebucht hat. Hierzu werden alle gebuchten Kurse des Schülers (aus $b_kurse) durchlaufen.
+                foreach ($b_kurse AS $row) 
+                {     
+                    $b=$row["kurs_id"];
+                
+                    //Liefert, ob der bereits gebuchte Kurs am 1. Tag stattfindet (0 oder 1)
+                    $query = "SELECT Tag_1 FROM kurse WHERE kurs_id=$b";
+                    $statement = $this->con->prepare($query);
+                    $statement->execute();
+                    $tag1 = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+                    //Liefert, ob der bereits gebuchte Kurs am 2. Tag stattfindet (0 oder 1)
+                    $query = "SELECT Tag_2 FROM kurse WHERE kurs_id=$b";
+                    $statement = $this->con->prepare($query);
+                    $statement->execute();
+                    $tag2 = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+                    //Liefert, ob der bereits gebuchte Kurs am 3. Tag stattfindet (0 oder 1)
+                    $query = "SELECT Tag_3 FROM kurse WHERE kurs_id=$b";
+                    $statement = $this->con->prepare($query);
+                    $statement->execute();
+                    $tag3 = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+                
+                    //Testet, ob es Überschneidungen gibt. Falls ja, wird der test auf false gesetzt, damit der Benutzer am Ende nicht eingefügt wird.
+                    if($tag1_pr[0]["Tag_1"]==1 AND $tag1[0]["Tag_1"]==1){
+                        $test=false;
+                        $ausgabe = $ausgabe."<div class='alert alert-danger alert-dismissible fade show' role='alert'>An Tag 1 hast du bereits einen Kurs gebucht!   </div>";
+                    }
+                    if($tag2_pr[0]["Tag_2"]==1 AND $tag2[0]["Tag_2"]==1){
+                        $test=false;
+                        $ausgabe = $ausgabe."<div class='alert alert-danger alert-dismissible fade show' role='alert'>An Tag 2 hast du bereits einen Kurs gebucht!   </div>";
+                    }
+                    if($tag3_pr[0]["Tag_3"]==1 AND $tag3[0]["Tag_3"]==1){
+                        $test=false;
+                        $ausgabe = $ausgabe."<div class='alert alert-danger alert-dismissible fade show' role='alert'>An Tag 3 hast du bereits einen Kurs gebucht!   </div>";
+                    }
                 }
             }
 
