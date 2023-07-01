@@ -132,7 +132,7 @@ if(isset($_POST["IDKL"])){
             <tr>
                 <th>Benutzer ID</th>
                 <th>Name</th>
-                <th>Klasse</th>
+                <th>Projekte</th>
                 <th>Rolle</th>
                 <th></th>
                 <th></th>
@@ -141,7 +141,16 @@ if(isset($_POST["IDKL"])){
             <tr>
                 <td> <?php echo $row["benutzer_id"]; ?> </td>
                 <td> <?php echo $row["name"]; ?> </td>
-                <td> <?php echo $row["klasse"]; ?> </td>
+                <?php 
+                        $ausgabe = "";
+                        $kurse = $db->zeigeKurse();
+                        foreach($kurse AS $kurszeile){
+                            if($row["benutzer_id"] == $kurszeile["kursleiter1"]){$ausgabe = $ausgabe.$kurszeile["name"]."<br>";}
+                            if($row["benutzer_id"] == $kurszeile["kursleiter2"]){$ausgabe = $ausgabe.$kurszeile["name"]."<br>";}
+                            if($row["benutzer_id"] == $kurszeile["kursleiter3"]){$ausgabe = $ausgabe.$kurszeile["name"]."<br>";}
+                        }
+                ?>
+                <td> <?php echo $ausgabe; ?> </td>
                 <td> <?php echo $row["rolle"]; ?></td>
                 <td>
                     <form method='post' action='benutzerbearbeiten.php'>
